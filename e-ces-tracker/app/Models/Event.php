@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Event extends Model
+{
+    public function project() {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function community() {
+        return $this->belongsTo(Community::class);
+    }
+
+    public function surveys() {
+        return $this->hasMany(Survey::class);
+    }
+}
