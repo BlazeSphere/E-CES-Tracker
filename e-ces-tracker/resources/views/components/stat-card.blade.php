@@ -21,7 +21,7 @@
     
     @if($trend)
     <div class="mt-4 flex items-center gap-2">
-        <div class="bg-[#a2d240] px-2 py-0.5 rounded-full flex items-center gap-1">
+        <div class="bg-[#d9f99d] px-2 py-0.5 rounded-full flex items-center gap-1">
             <img src="https://www.figma.com/api/mcp/asset/f87fb02f-d9ed-4251-aa45-f7f5ab82aae6" class="w-2.5 h-2.5" alt="">
             <span class="text-[10px] font-bold text-black">+{{ $trend }}%</span>
         </div>

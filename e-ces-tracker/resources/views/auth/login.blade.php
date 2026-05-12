@@ -1,5 +1,5 @@
 <x-layouts.app>
-    <div class="min-h-screen flex flex-col bg-gradient-to-b from-[#1b8c00] to-[#e9f0fa] relative overflow-hidden">
+    <div class="min-h-screen flex flex-col bg-gradient-to-b from-[#15803d] to-[#e9f0fa] relative overflow-hidden">
         <!-- Background Overlay Image -->
         <div class="absolute inset-0 z-0 pointer-events-none">
              <img src="https://www.figma.com/api/mcp/asset/2b91f14b-87a0-43f9-8a23-ae9d4bd26616" class="w-full h-full object-cover opacity-80 mix-blend-overlay" alt="Background">

@@ -1,81 +1,153 @@
 <x-layouts.app>
-    <div class="flex min-h-screen bg-[#f0f3f5]">
-        <x-sidebar />
+    <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
+        <!-- Sidebar -->
+        <aside 
+            class="bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out h-full flex-shrink-0"
+            :class="sidebarOpen ? 'w-64' : 'w-20'"
+        >
+            <!-- Logo Section -->
+            <div class="h-[59px] flex items-center px-6 border-b border-gray-200 flex-shrink-0">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <img src="https://www.figma.com/api/mcp/asset/2c6f52c7-ef2f-4a66-9663-3d277bbcf184" class="w-10 h-10 object-contain flex-shrink-0" alt="Logo">
+                    <div class="transition-all duration-300 origin-left" :class="sidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 invisible'">
+                        <h2 class="font-bold text-[#15803d] text-base leading-none whitespace-nowrap">E-CES Tracker</h2>
+                        <p class="text-[10px] text-gray-500 whitespace-nowrap">DWCC Calapan</p>
+                    </div>
+                </div>
+            </div>
 
-        <div class="flex-grow flex flex-col">
-            <header class="bg-[#1b8c00] h-[59px] shadow-md flex items-center justify-between px-10 relative z-20">
-                <div></div>
-                <div class="flex items-center gap-6">
-                    <button class="text-white relative">
-                        <img src="https://www.figma.com/api/mcp/asset/a1c8481a-827d-4076-8bc0-790bba12b1e2" class="w-6 h-6" alt="Notifications">
+            <!-- Navigation -->
+            <nav class="flex-grow py-6 px-2 space-y-4 overflow-y-auto overflow-x-hidden">
+                <x-sidebar-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
+                    Dashboard
+                </x-sidebar-link>
+                <x-sidebar-link href="#" icon="users">
+                    Users
+                </x-sidebar-link>
+                <x-sidebar-link href="#" icon="audit">
+                    Audit Trails
+                </x-sidebar-link>
+                <x-sidebar-link href="#" icon="reports">
+                    Reports
+                </x-sidebar-link>
+            </nav>
+
+            <!-- Bottom Actions -->
+            <div class="bg-[#15803d] p-4 text-white space-y-2 flex-shrink-0 transition-all duration-300"
+                 :class="sidebarOpen ? 'px-2' : 'px-2'">
+                <x-sidebar-action-link href="#" icon="settings">
+                    Settings
+                </x-sidebar-action-link>
+                <x-sidebar-action-link href="#" icon="support">
+                    Support
+                </x-sidebar-action-link>
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    @csrf
+                    <x-sidebar-action-link href="{{ route('logout') }}" icon="logout" onclick="event.preventDefault(); this.closest('form').submit();">
+                        Logout
+                    </x-sidebar-action-link>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Right Side: Main Content & Header -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f0f3f5]">
+            <!-- Top Header -->
+            <header class="bg-[#1b8c00] h-[59px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex items-center justify-between px-6 flex-shrink-0 z-10 text-white">
+                <div class="flex items-center gap-4">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-white hover:bg-white/10 p-2 rounded-lg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
                     </button>
-                    <div class="h-10 w-0.5 bg-[#e9d88e] rounded-full"></div>
-                    <div class="flex items-center gap-3">
-                        <div class="text-right">
-                            <p class="text-white font-semibold text-sm leading-none">{{ Auth::user()->name ?? 'Guest' }}</p>
-                            <p class="text-white/80 text-[10px]">{{ Auth::user()->role_name ?? 'Super Admin' }}</p>
+                    
+                    <!-- Search Bar -->
+                    <div class="max-w-md hidden md:block w-64 lg:w-96">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input type="text" class="block w-full bg-white/10 border-none text-white text-sm rounded-lg pl-10 py-1.5 focus:ring-[#d9f99d] placeholder-white/50" placeholder="Search projects...">
                         </div>
-                        <img src="https://www.figma.com/api/mcp/asset/cb73a4f2-3974-4f1c-b1f7-5dc3911c941b" class="w-10 h-10 rounded-full" alt="User Profile">
+                    </div>
+                </div>
+
+                <!-- Right Header Actions -->
+                <div class="flex items-center gap-6">
+                    <button class="text-white hover:opacity-80 transition-opacity">
+                        <img src="https://www.figma.com/api/mcp/asset/a1c8481a-827d-4076-8bc0-790bba12b1e2" class="w-6 h-6 brightness-0 invert" alt="Notifications">
+                    </button>
+                    <div class="h-10 w-[1px] bg-white/20"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p class="text-white font-semibold text-sm leading-none">Divina Rivera</p>
+                            <p class="text-white/70 text-[10px]">{{ Auth::user()->role_name ?? 'Super Admin' }}</p>
+                        </div>
+                        <img src="https://www.figma.com/api/mcp/asset/cb73a4f2-3974-4f1c-b1f7-5dc3911c941b" class="w-10 h-10 rounded-full border border-white/20" alt="User Profile">
                     </div>
                 </div>
             </header>
 
-            <main class="p-10 flex-grow">
-                {{ $slot }}
-            </main>
+            <!-- Scrollable Content Area -->
+            <div class="flex-1 overflow-y-auto flex flex-col">
+                <main class="p-6 md:p-10 flex-grow">
+                    {{ $slot }}
+                </main>
 
-            <footer class="bg-[#1b8c00] text-white p-10 mt-auto">
-                <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                     <!-- Footer content same as login but maybe smaller or different grid -->
-                     <!-- I'll reuse the footer logic here -->
-                     <div class="flex flex-col items-center lg:items-start">
-                        <img src="https://www.figma.com/api/mcp/asset/76bfa99c-865a-4149-a2d8-c714156ffe01" class="w-24 h-24 mb-4 object-contain" alt="App Logo">
-                        <h3 class="font-inter font-bold text-base">Divine Word College of Calapan</h3>
-                        <p class="font-inter text-xs opacity-80">Community Extension Services</p>
-                    </div>
-
-                    <div>
-                        <h3 class="font-afacad font-bold text-xl mb-4">Quick Links</h3>
-                        <ul class="font-crimson space-y-1 text-xs">
-                            <li><a href="#" class="underline hover:text-gray-200">LMS</a></li>
-                            <li><a href="#" class="underline hover:text-gray-200">MAMS - STUDENTS</a></li>
-                            <li><a href="#" class="underline hover:text-gray-200">MAMS - PARENTS</a></li>
-                            <li><a href="#" class="underline hover:text-gray-200">MAMS - FACULTY</a></li>
-                            <li><a href="#" class="underline hover:text-gray-200">DWCC E-LIBRARY</a></li>
-                            <li><a href="#" class="underline hover:text-gray-200">DCWW WEBSITE</a></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 class="font-crimson font-bold text-xl mb-4">Contact Us</h3>
-                        <div class="space-y-3">
-                            <a href="#" class="flex items-center gap-2 hover:text-gray-200 text-sm">
-                                <img src="https://www.figma.com/api/mcp/asset/9d435cd9-2040-4f49-8058-0451fa2568bb" class="w-5 h-5" alt="Facebook">
-                                <span class="font-crimson font-semibold">Facebook</span>
-                            </a>
-                            <a href="#" class="flex items-center gap-2 hover:text-gray-200 text-sm">
-                                <img src="https://www.figma.com/api/mcp/asset/cd6e474a-332d-4b29-9c52-9428e4d7ff18" class="w-5 h-5" alt="Instagram">
-                                <span class="font-crimson font-semibold">Instagram</span>
-                            </a>
+                <!-- Footer -->
+                <footer class="bg-[#1b8c00] text-white p-10 flex-shrink-0">
+                    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                        <div class="flex flex-col items-center lg:items-start">
+                            <img src="https://www.figma.com/api/mcp/asset/8374364c-14d9-4be6-ba7e-c1d5a054a62b" class="w-32 h-32 mb-4 object-contain" alt="DWCC Logo">
+                            <h3 class="font-inter font-bold text-base">Divine Word College of Calapan</h3>
+                            <p class="font-inter text-xs opacity-80 text-center lg:text-left">Community Extension Services</p>
                         </div>
-                    </div>
 
-                    <div>
-                        <h3 class="font-crimson font-bold text-xl mb-4">Address</h3>
-                        <div class="space-y-3 font-crimson font-semibold text-xs leading-relaxed">
-                            <p>Gov. Infantado St., Calapan City, Oriental Mindoro</p>
-                            <div class="flex items-center gap-2">
-                                <img src="https://www.figma.com/api/mcp/asset/c4776847-df37-4c30-8d76-8a558bbf6b80" class="w-5 h-5" alt="Phone">
-                                <span>288-9311 - 288-9316</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <img src="https://www.figma.com/api/mcp/asset/dbeba99c-4019-44d7-9df2-df01bd359411" class="w-5 h-5" alt="Email">
-                                <span class="break-all">communityextensionservicesoffice@gmail.com</span>
+                        <div>
+                            <h3 class="font-afacad font-bold text-2xl mb-6">Quick Links</h3>
+                            <ul class="font-crimson space-y-1 text-sm text-white/90">
+                                <li><a href="#" class="underline hover:text-white">LMS</a></li>
+                                <li><a href="#" class="underline hover:text-white">MAMS - STUDENTS</a></li>
+                                <li><a href="#" class="underline hover:text-white">MAMS - PARENTS</a></li>
+                                <li><a href="#" class="underline hover:text-white">MAMS - FACULTY</a></li>
+                                <li><a href="#" class="underline hover:text-white">DWCC E-LIBRARY</a></li>
+                                <li><a href="#" class="underline hover:text-white">DCWW WEBSITE</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="font-crimson font-bold text-2xl mb-6">Contact Us</h3>
+                            <div class="space-y-4">
+                                <a href="#" class="flex items-center gap-3 hover:text-white text-sm">
+                                    <img src="https://www.figma.com/api/mcp/asset/2f272d4b-fefc-4c22-8e4a-d9a9c7118592" class="w-6 h-6 brightness-0 invert" alt="Facebook">
+                                    <span class="font-crimson font-semibold text-lg">Facebook</span>
+                                </a>
+                                <a href="#" class="flex items-center gap-3 hover:text-white text-sm">
+                                    <img src="https://www.figma.com/api/mcp/asset/faca2342-ecb8-4cf7-a0be-1feecc699010" class="w-6 h-6 brightness-0 invert" alt="Instagram">
+                                    <span class="font-crimson font-semibold text-lg">Instagram</span>
+                                </a>
                             </div>
                         </div>
+
+                        <div>
+                            <h3 class="font-crimson font-bold text-2xl mb-6">Address</h3>
+                            <div class="space-y-4 font-crimson font-semibold text-sm leading-relaxed text-white/90">
+                                <p>Gov. Infantado St., Calapan City, Oriental Mindoro</p>
+                                <div class="flex items-center gap-3">
+                                    <img src="https://www.figma.com/api/mcp/asset/54867b55-5988-40fa-9b4f-5e5b45f390b3" class="w-6 h-6 brightness-0 invert" alt="Phone">
+                                    <span>288-9311 - 288-9316</span>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <img src="https://www.figma.com/api/mcp/asset/f26eed56-66ff-4daa-8bc1-ab558d932a55" class="w-6 h-6 brightness-0 invert" alt="Email">
+                                    <span class="break-all text-[12px]">communityextensionservicesoffice@gmail.com</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </footer>
+                </footer>
+            </div>
         </div>
     </div>
 </x-layouts.app>
