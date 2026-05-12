@@ -10,12 +10,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    const ROLE_SUPER_ADMIN = 0;
+    const ROLE_ADMIN = 1;
+
+    public function getRoleNameAttribute()
+    {
+        return match ($this->role) {
+            self::ROLE_SUPER_ADMIN => 'Super Admin',
+            self::ROLE_ADMIN => 'Admin',
+            default => 'Unknown',
+        };
+    }
 
     /**
      * Get the attributes that should be cast.

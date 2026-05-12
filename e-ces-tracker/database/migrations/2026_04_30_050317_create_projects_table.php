@@ -11,14 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
-            $table->id();
-            $table->string('project_name');
-            $table->text('description');
-            $table->string('status')->default('planned'); // planned, ongoing, completed
-            $table->decimal('budget', 15, 2)->default(0);
-            $table->timestamps();
-        });
+        // Table already created in an earlier migration
     }
 
     /**
@@ -26,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        //
     }
 };

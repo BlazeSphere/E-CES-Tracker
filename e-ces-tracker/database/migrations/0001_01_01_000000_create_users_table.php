@@ -19,9 +19,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             
-            // Added Role column based on your Scope: SuperAdmin, Staff, Faculty, Volunteer
-            // We set 'volunteer' as the default for safety.
-            $table->string('role')->default('volunteer'); 
+            // Role: 0 = Super Admin, 1 = Admin
+            $table->integer('role')->default(1); 
             
             $table->rememberToken();
             $table->timestamps();

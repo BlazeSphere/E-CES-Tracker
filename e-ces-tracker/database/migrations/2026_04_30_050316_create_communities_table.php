@@ -11,14 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('communities', function (Blueprint $table) {
-            $table->id();
-            $table->string('community_name');
-            $table->string('location');
-            $table->text('demographics')->nullable();
-            $table->text('history')->nullable();
-            $table->timestamps();
-        });
+        // Table already created in an earlier migration
     }
 
     /**
@@ -26,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('communities');
+        //
     }
 };
