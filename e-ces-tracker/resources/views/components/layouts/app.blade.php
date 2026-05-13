@@ -14,6 +14,7 @@
 
         <!-- Scripts -->
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-[#f0f3f5] text-gray-900">

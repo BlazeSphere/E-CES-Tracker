@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -30,4 +33,12 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
+
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/reports/export/excel', [ReportController::class, 'downloadExcel'])->name('reports.excel');
+Route::get('/reports/export/pdf', [ReportController::class, 'downloadPDF'])->name('reports.pdf');
 

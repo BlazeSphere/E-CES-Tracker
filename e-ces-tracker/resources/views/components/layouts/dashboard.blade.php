@@ -1,58 +1,11 @@
 <x-layouts.app>
     <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: true }">
-        <!-- Sidebar -->
-        <aside 
-            class="bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out h-full flex-shrink-0"
-            :class="sidebarOpen ? 'w-64' : 'w-20'"
-        >
-            <!-- Logo Section -->
-            <div class="h-[59px] flex items-center px-6 border-b border-gray-200 flex-shrink-0">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <img src="https://www.figma.com/api/mcp/asset/2c6f52c7-ef2f-4a66-9663-3d277bbcf184" class="w-10 h-10 object-contain flex-shrink-0" alt="Logo">
-                    <div class="transition-all duration-300 origin-left" :class="sidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 invisible'">
-                        <h2 class="font-bold text-[#15803d] text-base leading-none whitespace-nowrap">E-CES Tracker</h2>
-                        <p class="text-[10px] text-gray-500 whitespace-nowrap">DWCC Calapan</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Sidebar: Push/Pull direct child -->
+        <x-sidebar />
 
-            <!-- Navigation -->
-            <nav class="flex-grow py-6 px-2 space-y-4 overflow-y-auto overflow-x-hidden">
-                <x-sidebar-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
-                    Dashboard
-                </x-sidebar-link>
-                <x-sidebar-link href="#" icon="users">
-                    Users
-                </x-sidebar-link>
-                <x-sidebar-link href="#" icon="audit">
-                    Audit Trails
-                </x-sidebar-link>
-                <x-sidebar-link href="#" icon="reports">
-                    Reports
-                </x-sidebar-link>
-            </nav>
-
-            <!-- Bottom Actions -->
-            <div class="bg-[#15803d] p-4 text-white space-y-2 flex-shrink-0 transition-all duration-300"
-                 :class="sidebarOpen ? 'px-2' : 'px-2'">
-                <x-sidebar-action-link href="#" icon="settings">
-                    Settings
-                </x-sidebar-action-link>
-                <x-sidebar-action-link href="#" icon="support">
-                    Support
-                </x-sidebar-action-link>
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <x-sidebar-action-link href="{{ route('logout') }}" icon="logout" onclick="event.preventDefault(); this.closest('form').submit();">
-                        Logout
-                    </x-sidebar-action-link>
-                </form>
-            </div>
-        </aside>
-
-        <!-- Right Side: Main Content & Header -->
+        <!-- Main Content Wrapper: Naturally expands/contracts -->
         <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f0f3f5]">
-            <!-- Top Header -->
+            <!-- Top Header: Inside flex-1 to expand with it -->
             <header class="bg-[#1b8c00] h-[59px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] flex items-center justify-between px-6 flex-shrink-0 z-10 text-white">
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = !sidebarOpen" class="text-white hover:bg-white/10 p-2 rounded-lg transition-colors">
@@ -61,7 +14,14 @@
                         </svg>
                     </button>
                     
-                    <!-- Search Bar -->
+                    <div class="flex items-center gap-3">
+                        <!-- Text Logo remains in header for collapse view visibility if desired, 
+                             but per figma it's in sidebar. Let's keep it sync'd. -->
+                    </div>
+                </div>
+
+                <!-- Right Header Actions -->
+                <div class="flex items-center gap-6">
                     <div class="max-w-md hidden md:block w-64 lg:w-96">
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -72,10 +32,7 @@
                             <input type="text" class="block w-full bg-white/10 border-none text-white text-sm rounded-lg pl-10 py-1.5 focus:ring-[#d9f99d] placeholder-white/50" placeholder="Search projects...">
                         </div>
                     </div>
-                </div>
 
-                <!-- Right Header Actions -->
-                <div class="flex items-center gap-6">
                     <button class="text-white hover:opacity-80 transition-opacity">
                         <img src="https://www.figma.com/api/mcp/asset/a1c8481a-827d-4076-8bc0-790bba12b1e2" class="w-6 h-6 brightness-0 invert" alt="Notifications">
                     </button>

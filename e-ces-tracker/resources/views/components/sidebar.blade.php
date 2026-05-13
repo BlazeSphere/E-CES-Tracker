@@ -1,18 +1,18 @@
 <aside 
-    class="bg-white shadow-[inset_0px_4px_4px_0px_rgba(0,0,0,0.25)] flex flex-col fixed left-0 top-[59px] bottom-0 z-10 overflow-hidden transition-all duration-300 ease-in-out"
+    class="bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out h-full flex-shrink-0 overflow-hidden"
     :class="sidebarOpen ? 'w-64' : 'w-20'"
 >
     <nav class="flex-grow py-8 px-4 space-y-2">
         <x-sidebar-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')" icon="dashboard">
             Dashboard
         </x-sidebar-link>
-        <x-sidebar-link href="#" icon="users">
+        <x-sidebar-link href="{{ route('users.index') }}" :active="request()->routeIs('users.index')" icon="users">
             Users
         </x-sidebar-link>
-        <x-sidebar-link href="#" icon="audit">
+        <x-sidebar-link href="{{ route('audit.index') }}" :active="request()->routeIs('audit.index')" icon="audit">
             Audit Trails
         </x-sidebar-link>
-        <x-sidebar-link href="#" icon="reports">
+        <x-sidebar-link href="{{ route('reports.index') }}" :active="request()->routeIs('reports.index')" icon="reports">
             Reports
         </x-sidebar-link>
     </nav>
