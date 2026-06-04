@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
                 'id_number' => 'ADMIN-001',
             ]
         );
+
+        $this->call(ProjectSeeder::class);
     }
 }

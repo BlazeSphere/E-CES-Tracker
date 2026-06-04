@@ -69,10 +69,10 @@
 
         <!-- Summary Cards Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <x-stat-card label="Total Projects" value="124" trend="12" icon="projects" />
-            <x-stat-card label="Completed Surveys" value="850" trend="8" icon="surveys" />
-            <x-stat-card label="Total Volunteers" value="1,205" trend="15" icon="volunteers" />
-            <x-stat-card label="Active Communities" value="12" trend="2" icon="communities" />
+            <x-stat-card label="Total Projects" :value="$stats['totalProjects']" icon="projects" />
+            <x-stat-card label="Completed Surveys" :value="$stats['completedSurveys']" icon="surveys" />
+            <x-stat-card label="Total Volunteers" :value="$stats['totalVolunteers']" icon="volunteers" />
+            <x-stat-card label="Active Communities" :value="$stats['activeCommunities']" icon="communities" />
         </div>
 
         <!-- Charts Section -->
@@ -102,17 +102,21 @@
             document.addEventListener('DOMContentLoaded', function() {
                 // Pie Chart: Project Distribution
                 const pieCtx = document.getElementById('projectDistributionChart').getContext('2d');
+                const distData = @json($distributionData);
+                
                 new Chart(pieCtx, {
                     type: 'pie',
                     data: {
-                        labels: ['Outreach', 'Environmental', 'Educational', 'Health'],
+                        labels: distData.map(item => item.category),
                         datasets: [{
-                            data: [40, 25, 20, 15],
+                            data: distData.map(item => item.count),
                             backgroundColor: [
                                 '#15803d', // Dark Green
                                 '#d9f99d', // Light Green
                                 '#1b8c00', // Figma Green
-                                '#f0f3f5'  // Neutral Gray
+                                '#6366f1', // Blue
+                                '#f59e0b', // Amber
+                                '#ec4899'  // Pink
                             ],
                             borderWidth: 0
                         }]
@@ -133,13 +137,15 @@
 
                 // Bar Chart: Activity Trends
                 const barCtx = document.getElementById('activityTrendsChart').getContext('2d');
+                const monthlyData = @json($monthlyData);
+
                 new Chart(barCtx, {
                     type: 'bar',
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        labels: monthlyData.map(item => item.month),
                         datasets: [{
-                            label: 'Surveys Conducted',
-                            data: [45, 59, 80, 81, 56, 55, 40, 95, 75, 60, 85, 100],
+                            label: 'Projects Started',
+                            data: monthlyData.map(item => item.count),
                             backgroundColor: '#d9f99d',
                             borderColor: '#15803d',
                             borderWidth: 1,
@@ -152,7 +158,8 @@
                         scales: {
                             y: {
                                 beginAtZero: true,
-                                grid: { color: '#f3f4f6' }
+                                grid: { color: '#f3f4f6' },
+                                ticks: { stepSize: 1 }
                             },
                             x: {
                                 grid: { display: false }
@@ -170,7 +177,7 @@
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
             <div class="p-6 border-b border-gray-100 flex items-center justify-between">
                 <h3 class="text-lg font-bold text-gray-900 font-inter">Detailed Project Impact Report</h3>
-                <span class="text-xs text-gray-500 font-inter">Showing results for 2026 Fiscal Year</span>
+                <span class="text-xs text-gray-500 font-inter">Showing results for {{ date('Y') }} Fiscal Year</span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left font-inter">
@@ -184,27 +191,26 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach([
-                            ['Coastal Clean-up', 'CS Dept', '150 Households', '100%', '4.8/5'],
-                            ['Literacy Program', 'Education', '85 Students', '75%', '4.5/5'],
-                            ['Health Caravan', 'Nursing', '300 Seniors', '100%', '4.9/5'],
-                            ['Waste Management', 'Engineering', '12 Barangays', '40%', '4.2/5']
-                        ] as $row)
+                        @forelse($projects as $project)
                         <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 font-bold text-gray-900 text-sm">{{ $row[0] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $row[1] }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $row[2] }}</td>
+                            <td class="px-6 py-4 font-bold text-gray-900 text-sm">{{ $project->project_name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $project->department ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ number_format($project->beneficiaries_count) }} People</td>
                             <td class="px-6 py-4">
                                 <div class="w-full bg-gray-100 rounded-full h-1.5 max-w-[100px]">
-                                    <div class="bg-[#1b8c00] h-1.5 rounded-full" style="width: {{ $row[3] }}"></div>
+                                    <div class="bg-[#1b8c00] h-1.5 rounded-full" style="width: {{ $project->completion_percentage }}%"></div>
                                 </div>
-                                <span class="text-[10px] text-gray-400 mt-1 block">{{ $row[3] }}</span>
+                                <span class="text-[10px] text-gray-400 mt-1 block">{{ number_format($project->completion_percentage, 0) }}%</span>
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-sm font-bold text-[#1b8c00]">{{ $row[4] }}</span>
+                                <span class="text-sm font-bold text-[#1b8c00]">{{ number_format($project->impact_score, 1) }}/5</span>
                             </td>
                         </tr>
-                        @endforeach
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500 italic">No projects found for the current report period.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

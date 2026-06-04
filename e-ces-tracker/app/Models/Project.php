@@ -7,7 +7,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Project extends Model
 {
-    protected $fillable = ['project_name', 'description', 'status', 'budget', 'user_id'];
+    protected $fillable = [
+        'project_name', 
+        'description', 
+        'category',
+        'department',
+        'status', 
+        'budget', 
+        'volunteers_count',
+        'beneficiaries_count',
+        'completion_percentage',
+        'impact_score',
+        'user_id'
+    ];
 
     public function events() {
         return $this->hasMany(Event::class);

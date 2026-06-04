@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('project_name');
             $table->text('description');
             $table->string('status')->default('planned'); // planned, ongoing, completed
