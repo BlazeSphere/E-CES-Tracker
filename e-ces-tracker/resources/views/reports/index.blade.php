@@ -33,38 +33,41 @@
             </div>
 
             <!-- Filter Bar -->
-            <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-wrap gap-4 items-end">
+            <form action="{{ route('reports.index') }}" method="GET" class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm flex flex-wrap gap-4 items-end">
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-inter">Date Range</label>
-                    <select class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
-                        <option>Last 30 Days</option>
-                        <option>Last Quarter</option>
-                        <option>Current Year</option>
-                        <option>Custom Range</option>
+                    <select name="date_range" class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
+                        <option value="">Select Range</option>
+                        <option value="Last 30 Days" {{ $dateRange == 'Last 30 Days' ? 'selected' : '' }}>Last 30 Days</option>
+                        <option value="Last Quarter" {{ $dateRange == 'Last Quarter' ? 'selected' : '' }}>Last Quarter</option>
+                        <option value="Current Year" {{ $dateRange == 'Current Year' ? 'selected' : '' }}>Current Year</option>
                     </select>
                 </div>
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-inter">Category</label>
-                    <select class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
-                        <option>All Projects</option>
-                        <option>Outreach</option>
-                        <option>Environmental</option>
-                        <option>Educational</option>
+                    <select name="category" class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
+                        <option value="All Projects">All Projects</option>
+                        <option value="Outreach" {{ $category == 'Outreach' ? 'selected' : '' }}>Outreach</option>
+                        <option value="Environmental" {{ $category == 'Environmental' ? 'selected' : '' }}>Environmental</option>
+                        <option value="Educational" {{ $category == 'Educational' ? 'selected' : '' }}>Educational</option>
+                        <option value="Health" {{ $category == 'Health' ? 'selected' : '' }}>Health</option>
                     </select>
                 </div>
                 <div class="space-y-1">
                     <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-inter">Department</label>
-                    <select class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
-                        <option>All Departments</option>
-                        <option>CS Department</option>
-                        <option>Nursing Department</option>
-                        <option>Business Department</option>
+                    <select name="department" class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
+                        <option value="All Departments">All Departments</option>
+                        <option value="CS Department" {{ $department == 'CS Department' ? 'selected' : '' }}>CS Department</option>
+                        <option value="Education Department" {{ $department == 'Education Department' ? 'selected' : '' }}>Education Department</option>
+                        <option value="Nursing Department" {{ $department == 'Nursing Department' ? 'selected' : '' }}>Nursing Department</option>
+                        <option value="Business Department" {{ $department == 'Business Department' ? 'selected' : '' }}>Business Department</option>
+                        <option value="Engineering Department" {{ $department == 'Engineering Department' ? 'selected' : '' }}>Engineering Department</option>
                     </select>
                 </div>
-                <button class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-6 py-2 rounded-lg text-sm font-bold transition-colors">
+                <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-6 py-2 rounded-lg text-sm font-bold transition-colors">
                     Apply Filters
                 </button>
-            </div>
+            </form>
         </div>
 
         <!-- Summary Cards Section -->
