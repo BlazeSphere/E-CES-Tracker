@@ -34,15 +34,31 @@
                     </div>
 
                     <button class="text-white hover:opacity-80 transition-opacity">
-                        <img src="https://www.figma.com/api/mcp/asset/a1c8481a-827d-4076-8bc0-790bba12b1e2" class="w-6 h-6 brightness-0 invert" alt="Notifications">
+                        <img src="{{ asset('images/icons/notifications.png') }}" class="w-6 h-6 brightness-0 invert" alt="Notifications">
                     </button>
                     <div class="h-10 w-[1px] bg-white/20"></div>
                     <div class="flex items-center gap-3">
                         <div class="text-right hidden sm:block">
-                            <p class="text-white font-semibold text-sm leading-none">Divina Rivera</p>
+                            <p class="text-white font-semibold text-sm leading-none">{{ Auth::user()->name ?? 'User' }}</p>
                             <p class="text-white/70 text-[10px]">{{ Auth::user()->role_name ?? 'Super Admin' }}</p>
                         </div>
-                        <img src="https://www.figma.com/api/mcp/asset/cb73a4f2-3974-4f1c-b1f7-5dc3911c941b" class="w-10 h-10 rounded-full border border-white/20" alt="User Profile">
+                        @php
+                            $userName = Auth::user()->name ?? 'User';
+                            $initials = strtoupper(substr($userName, 0, 1));
+                        @endphp
+                        @if(isset(Auth::user()->profile_photo_path) && Auth::user()->profile_photo_path)
+                            <img src="{{ asset(Auth::user()->profile_photo_path) }}" 
+                                 class="w-10 h-10 rounded-full border border-white/20 object-cover" 
+                                 alt="{{ $userName }}"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold border border-white/40">
+                                {{ $initials }}
+                            </div>
+                        @else
+                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold border border-white/40">
+                                {{ $initials }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </header>
@@ -57,7 +73,7 @@
                 <footer class="bg-[#1b8c00] text-white p-10 flex-shrink-0">
                     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                         <div class="flex flex-col items-center lg:items-start">
-                            <img src="https://www.figma.com/api/mcp/asset/8374364c-14d9-4be6-ba7e-c1d5a054a62b" class="w-32 h-32 mb-4 object-contain" alt="DWCC Logo">
+                            <img src="{{ asset('images/logo.png') }}" class="w-32 h-32 mb-4 object-contain" alt="DWCC Logo">
                             <h3 class="font-inter font-bold text-base">Divine Word College of Calapan</h3>
                             <p class="font-inter text-xs opacity-80 text-center lg:text-left">Community Extension Services</p>
                         </div>
@@ -78,11 +94,11 @@
                             <h3 class="font-crimson font-bold text-2xl mb-6">Contact Us</h3>
                             <div class="space-y-4">
                                 <a href="#" class="flex items-center gap-3 hover:text-white text-sm">
-                                    <img src="https://www.figma.com/api/mcp/asset/2f272d4b-fefc-4c22-8e4a-d9a9c7118592" class="w-6 h-6 brightness-0 invert" alt="Facebook">
+                                    <img src="{{ asset('images/icons/facebook.png') }}" class="w-6 h-6 brightness-0 invert" alt="Facebook">
                                     <span class="font-crimson font-semibold text-lg">Facebook</span>
                                 </a>
                                 <a href="#" class="flex items-center gap-3 hover:text-white text-sm">
-                                    <img src="https://www.figma.com/api/mcp/asset/faca2342-ecb8-4cf7-a0be-1feecc699010" class="w-6 h-6 brightness-0 invert" alt="Instagram">
+                                    <img src="{{ asset('images/icons/instagram.png') }}" class="w-6 h-6 brightness-0 invert" alt="Instagram">
                                     <span class="font-crimson font-semibold text-lg">Instagram</span>
                                 </a>
                             </div>
@@ -93,11 +109,11 @@
                             <div class="space-y-4 font-crimson font-semibold text-sm leading-relaxed text-white/90">
                                 <p>Gov. Infantado St., Calapan City, Oriental Mindoro</p>
                                 <div class="flex items-center gap-3">
-                                    <img src="https://www.figma.com/api/mcp/asset/54867b55-5988-40fa-9b4f-5e5b45f390b3" class="w-6 h-6 brightness-0 invert" alt="Phone">
+                                    <img src="{{ asset('images/icons/phone.png') }}" class="w-6 h-6 brightness-0 invert" alt="Phone">
                                     <span>288-9311 - 288-9316</span>
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <img src="https://www.figma.com/api/mcp/asset/f26eed56-66ff-4daa-8bc1-ab558d932a55" class="w-6 h-6 brightness-0 invert" alt="Email">
+                                    <img src="{{ asset('images/icons/email.png') }}" class="w-6 h-6 brightness-0 invert" alt="Email">
                                     <span class="break-all text-[12px]">communityextensionservicesoffice@gmail.com</span>
                                 </div>
                             </div>

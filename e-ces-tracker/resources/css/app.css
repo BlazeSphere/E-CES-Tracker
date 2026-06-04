@@ -11,3 +11,7 @@
     --font-afacad: 'Afacad', sans-serif;
     --font-crimson: 'Crimson Text', serif;
 }
+
+[x-cloak] {
+    display: none !important;
+}

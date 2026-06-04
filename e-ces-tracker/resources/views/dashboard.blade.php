@@ -22,13 +22,9 @@
                     <h3 class="font-bold text-sm">Institutional Growth Trends</h3>
                     <p class="text-[10px] opacity-80">Consolidated survey and project metrics</p>
                 </div>
-                <div class="flex-grow flex items-center justify-center p-12 text-center">
-                    <div class="space-y-4 w-full">
-                        <p class="text-2xl font-bold text-black font-inter mx-auto max-w-sm">graph about surveys conducted, volunteers and proposed projects</p>
-                        <!-- Placeholder for Chart.js or similar -->
-                        <div class="h-64 w-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center italic text-gray-400">
-                            Chart visualization will be rendered here
-                        </div>
+                <div class="flex-grow flex items-center justify-center p-6 text-center">
+                    <div class="w-full h-[300px]">
+                        <canvas id="growthChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -42,19 +38,19 @@
                     </div>
                     <div class="p-6 space-y-4">
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="https://www.figma.com/api/mcp/asset/295aa847-aed2-40a1-84a2-6f86fc5e217f" class="w-6 h-6" alt="">
+                            <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-6 h-6" alt="">
                             <span class="font-semibold text-sm">Add System User</span>
                         </button>
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="https://www.figma.com/api/mcp/asset/295aa847-aed2-40a1-84a2-6f86fc5e217f" class="w-6 h-6" alt="">
+                            <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-6 h-6" alt="">
                             <span class="font-semibold text-sm">Create New Survey</span>
                         </button>
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="https://www.figma.com/api/mcp/asset/184e0d6a-f5c6-4cd6-8820-3511cf7438ef" class="w-5 h-5 ml-0.5" alt="">
+                            <img src="{{ asset('images/icons/audit.png') }}" class="w-5 h-5 ml-0.5" alt="">
                             <span class="font-semibold text-sm">Audit Logs</span>
                         </button>
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="https://www.figma.com/api/mcp/asset/8bac872c-95d4-43f6-8333-5e3ed146d2bd" class="w-6 h-6" alt="">
+                            <img src="{{ asset('images/icons/reports.png') }}" class="w-6 h-6" alt="">
                             <span class="font-semibold text-sm">Generate Summary Report</span>
                         </button>
                     </div>
@@ -64,22 +60,28 @@
                 <div class="bg-white border border-[#15803d] rounded-lg shadow-sm overflow-hidden">
                     <div class="bg-[#15803d] p-4 text-white shadow-md flex justify-between items-center">
                         <h3 class="font-bold text-sm">Audit Log</h3>
-                        <a href="#" class="text-[10px] font-medium hover:underline">View All</a>
+                        <a href="{{ route('audit.index') }}" class="text-[10px] font-medium hover:underline">View All</a>
                     </div>
                     <div class="p-4 space-y-6">
-                        @foreach(range(1, 4) as $i)
+                        @forelse($auditLogs ?? [] as $log)
                         <div class="flex gap-4">
-                            <img src="https://www.figma.com/api/mcp/asset/0bbd0c1e-a731-48ab-8b09-4fed4fe7180e" class="w-10 h-10 rounded-full" alt="">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 text-gray-500 font-bold text-xs">
+                                {{ strtoupper(substr($log->user->name ?? 'U', 0, 1)) }}{{ strtoupper(substr(explode(' ', $log->user->name ?? ' ')[1] ?? '', 0, 1)) }}
+                            </div>
                             <div class="flex-grow">
                                 <p class="text-[11px] leading-tight">
-                                    <span class="font-semibold">Maria Santos</span>
-                                    <span class="font-light">published a new survey</span>
+                                    <span class="font-semibold">{{ $log->user->name ?? 'System' }}</span>
+                                    <span class="font-light">{{ $log->action }}</span>
                                 </p>
-                                <p class="text-[11px] text-[#15803d] font-semibold leading-tight mt-0.5">Evaluation for Community Service in Pachoca for Graduating Students</p>
-                                <p class="text-[8px] text-gray-400 mt-1">2 hours ago</p>
+                                <p class="text-[11px] text-[#15803d] font-semibold leading-tight mt-0.5">{{ $log->description }}</p>
+                                <p class="text-[8px] text-gray-400 mt-1">{{ $log->created_at->diffForHumans() }}</p>
                             </div>
                         </div>
-                        @endforeach
+                        @empty
+                            <div class="py-10 text-center">
+                                <p class="text-xs text-gray-400 italic">No recent activity</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -103,59 +105,46 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @forelse($projects ?? [] as $project)
+                        @foreach($projects as $project)
                             <tr>
                                 <td class="px-6 py-4">
-                                    <p class="text-[#0c4010] font-semibold text-xs">{{ $project->name }}</p>
+                                    <p class="text-[#0c4010] font-semibold text-xs">{{ $project->title }}</p>
                                     <p class="text-[8px] text-[#0c4010] font-light">Project Date: {{ $project->created_at->format('m-d-Y') }}</p>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
-                                        <img src="https://www.figma.com/api/mcp/asset/f5a35d75-9714-4dd7-adf2-4bcacd2d2ee6" class="w-6 h-6" alt="">
-                                        <span class="text-xs font-semibold">{{ $project->lead_organizer ?? 'N/A' }}</span>
+                                        @php
+                                            $organizerName = $project->user->name ?? 'N/A';
+                                            $organizerInitials = strtoupper(substr($organizerName, 0, 1));
+                                        @endphp
+                                        <div class="w-6 h-6 rounded-full bg-[#d9f99d] flex items-center justify-center text-[#15803d] font-bold text-[10px] flex-shrink-0">
+                                            {{ $organizerInitials }}
+                                        </div>
+                                        <span class="text-xs font-semibold">{{ $organizerName }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xs font-semibold text-[#44341d]">{{ $project->events->first()?->community?->name ?? 'N/A' }}</span>
+                                    <span class="text-xs font-semibold text-[#44341d]">{{ $project->partner_name ?? 'N/A' }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xs font-semibold text-black">{{ $project->status ?? 'In Progress' }}</span>
+                                    <span class="text-xs font-semibold 
+                                        @switch($project->status)
+                                            @case('Completed') text-green-600 @break
+                                            @case('In Progress') text-yellow-600 @break
+                                            @case('Cancelled') text-red-600 @break
+                                            @default text-black
+                                        @endswitch">
+                                        {{ $project->status }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="#" class="text-[#44341d] font-semibold text-xs flex items-center gap-2 hover:underline">
                                         See Details
-                                        <img src="https://www.figma.com/api/mcp/asset/18fd20d8-7256-4f39-8f7f-c9a4933eacd0" class="w-4 h-4" alt="">
+                                        <img src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4" alt="">
                                     </a>
                                 </td>
                             </tr>
-                        @empty
-                            @foreach(range(1, 5) as $i)
-                            <tr>
-                                <td class="px-6 py-4">
-                                    <p class="text-[#0c4010] font-semibold text-xs">Coastal Clean-up Drive</p>
-                                    <p class="text-[8px] text-[#0c4010] font-light">Project Date: 05-05-2026</p>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
-                                        <img src="https://www.figma.com/api/mcp/asset/f5a35d75-9714-4dd7-adf2-4bcacd2d2ee6" class="w-6 h-6" alt="">
-                                        <span class="text-xs font-semibold">Mr. Abu Dabi</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-xs font-semibold text-[#44341d]">Mindoro State University</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="text-xs font-semibold text-black">In Progress</span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <a href="#" class="text-[#44341d] font-semibold text-xs flex items-center gap-2 hover:underline">
-                                        See Details
-                                        <img src="https://www.figma.com/api/mcp/asset/18fd20d8-7256-4f39-8f7f-c9a4933eacd0" class="w-4 h-4" alt="">
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        @endforelse
+                        @endforeach
                     </tbody>
                 </table>
             </div>

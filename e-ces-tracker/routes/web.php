@@ -35,6 +35,8 @@ Route::post('/logout', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
 

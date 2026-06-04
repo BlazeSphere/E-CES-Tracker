@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'status', 'id_number'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -27,6 +27,14 @@ class User extends Authenticatable
             self::ROLE_ADMIN => 'Admin',
             default => 'Unknown',
         };
+    }
+
+    /**
+     * Check if the user is deactivated.
+     */
+    public function isDeactivated(): bool
+    {
+        return $this->status === 'inactive';
     }
 
     /**

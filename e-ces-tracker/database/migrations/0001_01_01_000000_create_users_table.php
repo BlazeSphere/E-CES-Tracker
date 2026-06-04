@@ -21,6 +21,7 @@ return new class extends Migration
             
             // Role: 0 = Super Admin, 1 = Admin
             $table->integer('role')->default(1); 
+            $table->string('status')->default('active');
             
             $table->rememberToken();
             $table->timestamps();
