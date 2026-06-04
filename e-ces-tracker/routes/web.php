@@ -8,6 +8,8 @@ use App\Http\Controllers\ReportController;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
+use App\Http\Controllers\SettingsController;
+
 Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -19,6 +21,10 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+
+Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+Route::post('/settings/school', [SettingsController::class, 'storeSchool'])->name('settings.school.store');
+Route::post('/settings/community', [SettingsController::class, 'storeCommunity'])->name('settings.community.store');
 
 Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
 

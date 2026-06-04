@@ -19,7 +19,7 @@
 
     <div class="bg-[#15803d] p-6 text-white space-y-4 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all duration-300"
          :class="sidebarOpen ? 'px-6' : 'px-4'">
-        <x-sidebar-action-link href="#" icon="settings">
+        <x-sidebar-action-link href="{{ route('settings.index') }}" icon="settings" :active="request()->routeIs('settings.index')">
             Settings
         </x-sidebar-action-link>
         <x-sidebar-action-link href="#" icon="support">
