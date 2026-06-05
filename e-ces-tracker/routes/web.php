@@ -18,17 +18,19 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::middleware(['role:0'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
-Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-Route::post('/settings/school', [SettingsController::class, 'storeSchool'])->name('settings.school.store');
-Route::post('/settings/community', [SettingsController::class, 'storeCommunity'])->name('settings.community.store');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/school', [SettingsController::class, 'storeSchool'])->name('settings.school.store');
+    Route::post('/settings/community', [SettingsController::class, 'storeCommunity'])->name('settings.community.store');
 
-Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
 
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-Route::get('/reports/export/excel', [ReportController::class, 'downloadExcel'])->name('reports.excel');
-Route::get('/reports/export/pdf', [ReportController::class, 'downloadPDF'])->name('reports.pdf');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export/excel', [ReportController::class, 'downloadExcel'])->name('reports.excel');
+    Route::get('/reports/export/pdf', [ReportController::class, 'downloadPDF'])->name('reports.pdf');
+});
 

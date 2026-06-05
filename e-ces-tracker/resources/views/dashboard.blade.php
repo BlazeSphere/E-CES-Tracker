@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto p-6 space-y-10">
         <!-- Dashboard Header -->
         <div>
-            <h1 class="text-5xl font-bold text-black font-inter">Dashboard</h1>
+            <h1 class="text-5xl font-bold text-black font-inter tracking-tight">Dashboard</h1>
             <p class="text-[#0c4010] font-semibold text-lg font-inter">Overview and Monitoring</p>
         </div>
 
@@ -97,50 +97,50 @@
                 <table class="w-full text-left">
                     <thead class="bg-white border-b shadow-sm">
                         <tr>
-                            <th class="px-6 py-4 font-semibold text-xs">Project Title/Name</th>
-                            <th class="px-6 py-4 font-semibold text-xs">Lead Organizer</th>
-                            <th class="px-6 py-4 font-semibold text-xs">Community Partner</th>
-                            <th class="px-6 py-4 font-semibold text-xs">Status</th>
-                            <th class="px-6 py-4 font-semibold text-xs">Actions</th>
+                            <th class="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Project Title/Name</th>
+                            <th class="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Lead Organizer</th>
+                            <th class="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Community Partner</th>
+                            <th class="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @foreach($projects as $project)
-                            <tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <p class="text-[#0c4010] font-semibold text-xs">{{ $project->title }}</p>
-                                    <p class="text-[8px] text-[#0c4010] font-light">Project Date: {{ $project->created_at->format('m-d-Y') }}</p>
+                                    <p class="text-[#0c4010] font-bold text-sm tracking-tight">{{ $project->title }}</p>
+                                    <p class="text-[10px] text-[#0c4010] font-medium opacity-60">Project Date: {{ $project->created_at->format('m-d-Y') }}</p>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-3">
                                         @php
                                             $organizerName = $project->user->name ?? 'N/A';
                                             $organizerInitials = strtoupper(substr($organizerName, 0, 1));
                                         @endphp
-                                        <div class="w-6 h-6 rounded-full bg-[#d9f99d] flex items-center justify-center text-[#15803d] font-bold text-[10px] flex-shrink-0">
+                                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs shadow-inner">
                                             {{ $organizerInitials }}
                                         </div>
-                                        <span class="text-xs font-semibold">{{ $organizerName }}</span>
+                                        <span class="text-xs font-bold text-gray-700">{{ $organizerName }}</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xs font-semibold text-[#44341d]">{{ $project->partner_name ?? 'N/A' }}</span>
+                                    <span class="text-xs font-bold text-gray-900">{{ $project->partner_name ?? 'N/A' }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="text-xs font-semibold 
+                                    <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest
                                         @switch($project->status)
-                                            @case('Completed') text-green-600 @break
-                                            @case('In Progress') text-yellow-600 @break
-                                            @case('Cancelled') text-red-600 @break
-                                            @default text-black
+                                            @case('Completed') bg-green-100 text-green-700 @break
+                                            @case('In Progress') bg-yellow-100 text-yellow-700 @break
+                                            @case('Cancelled') bg-red-100 text-red-700 @break
+                                            @default bg-gray-100 text-gray-700
                                         @endswitch">
                                         {{ $project->status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="#" class="text-[#44341d] font-semibold text-xs flex items-center gap-2 hover:underline">
+                                    <a href="#" class="text-emerald-900 font-bold text-xs flex items-center gap-2 hover:underline group">
                                         See Details
-                                        <img src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4" alt="">
+                                        <img src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" alt="">
                                     </a>
                                 </td>
                             </tr>

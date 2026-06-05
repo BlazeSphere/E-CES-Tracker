@@ -24,6 +24,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        User::updateOrCreate(
+            ['email' => 'sit.admin@dwcc.edu.ph'],
+            [
+                'name' => 'Divina Rivera',
+                'password' => Hash::make('ADMIN123'),
+                'role' => 1,
+                'status' => 'active',
+                'id_number' => 'SIT-001',
+                'department' => 'SIT',
+            ]
+        );
+
         $this->call([
             SchoolSeeder::class,
             ProjectSeeder::class,
