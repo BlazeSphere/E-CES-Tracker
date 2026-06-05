@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SurveyController;
 
 Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
@@ -33,4 +34,7 @@ Route::middleware(['role:0'])->group(function () {
     Route::get('/reports/export/excel', [ReportController::class, 'downloadExcel'])->name('reports.excel');
     Route::get('/reports/export/pdf', [ReportController::class, 'downloadPDF'])->name('reports.pdf');
 });
+
+Route::resource('surveys', SurveyController::class);
+
 

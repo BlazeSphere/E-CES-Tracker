@@ -20,10 +20,10 @@
         @endif
 
         @if(auth()->user()->role === 1)
-            <x-sidebar-link href="#" :active="false" icon="plus-circle">
+            <x-sidebar-link href="{{ route('surveys.create') }}" :active="request()->routeIs('surveys.create')" icon="plus-circle">
                 Survey Builder
             </x-sidebar-link>
-            <x-sidebar-link href="#" :active="false" icon="stat-surveys">
+            <x-sidebar-link href="{{ route('surveys.index') }}" :active="request()->routeIs('surveys.index')" icon="stat-surveys">
                 Survey Results
             </x-sidebar-link>
             <x-sidebar-link href="#" :active="false" icon="stat-projects">
