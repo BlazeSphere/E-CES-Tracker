@@ -26,7 +26,7 @@
             <x-sidebar-link href="{{ route('surveys.index') }}" :active="request()->routeIs('surveys.index')" icon="stat-surveys">
                 Survey Results
             </x-sidebar-link>
-            <x-sidebar-link href="#" :active="false" icon="stat-projects">
+            <x-sidebar-link href="{{ route('projects.index') }}" :active="request()->routeIs('projects.*')" icon="stat-projects">
                 Projects
             </x-sidebar-link>
             <x-sidebar-link href="#" :active="false" icon="stat-volunteers">

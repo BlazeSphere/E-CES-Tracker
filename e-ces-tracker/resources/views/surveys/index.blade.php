@@ -14,9 +14,23 @@
 
         <!-- Survey List Card -->
         <div class="bg-white border border-emerald-100 rounded-2xl shadow-sm overflow-hidden">
-            <div class="p-6 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-900 font-inter">Recent Surveys</h3>
-                <span class="text-xs text-gray-500 font-medium font-inter">Total: {{ $surveys->total() }} Surveys</span>
+            <div class="p-6 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center flex-wrap gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 font-inter">Recent Surveys</h3>
+                    <span class="text-xs text-gray-500 font-medium font-inter">Total: {{ $surveys->total() }} Surveys</span>
+                </div>
+                
+                <form action="{{ route('surveys.index') }}" method="GET" class="flex items-center gap-2">
+                    <select name="project_id" class="bg-white border-gray-200 rounded-lg px-4 py-2 text-sm font-bold text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm">
+                        <option value="">All Projects</option>
+                        @foreach($projects as $project)
+                            <option value="{{ $project->id }}" {{ ($selectedProject ?? '') == $project->id ? 'selected' : '' }}>
+                                CES-Project #{{ str_pad($project->id, 3, '0', STR_PAD_LEFT) }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="bg-emerald-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-emerald-900 transition-colors shadow-sm">Filter</button>
+                </form>
             </div>
             
             <div class="overflow-x-auto">
@@ -24,6 +38,7 @@
                     <thead class="bg-white border-b border-gray-100">
                         <tr>
                             <th class="px-6 py-4 font-bold text-[10px] text-gray-400 uppercase tracking-widest">Survey Details</th>
+                            <th class="px-6 py-4 font-bold text-[10px] text-gray-400 uppercase tracking-widest">Project</th>
                             <th class="px-6 py-4 font-bold text-[10px] text-gray-400 uppercase tracking-widest">Status</th>
                             <th class="px-6 py-4 font-bold text-[10px] text-gray-400 uppercase tracking-widest">Questions</th>
                             <th class="px-6 py-4 font-bold text-[10px] text-gray-400 uppercase tracking-widest">Created Date</th>
@@ -38,14 +53,25 @@
                                 <p class="text-xs text-gray-500 line-clamp-1 mt-0.5">{{ $survey->description ?? 'No description provided' }}</p>
                             </td>
                             <td class="px-6 py-5">
-                                <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest
-                                    @switch($survey->status)
-                                        @case('active') bg-emerald-100 text-emerald-700 @break
-                                        @case('closed') bg-red-100 text-red-700 @break
-                                        @default bg-gray-100 text-gray-600
-                                    @endswitch">
-                                    {{ $survey->status }}
-                                </span>
+                                <span class="text-xs font-bold text-gray-700">{{ $survey->project->project_name ?? 'Unassigned' }}</span>
+                            </td>
+                            <td class="px-6 py-5">
+                                <div class="flex flex-col items-start gap-1">
+                                    <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest
+                                        @switch($survey->status)
+                                            @case('active') bg-emerald-100 text-emerald-700 @break
+                                            @case('closed') bg-red-100 text-red-700 @break
+                                            @default bg-gray-100 text-gray-600
+                                        @endswitch">
+                                        {{ $survey->status }}
+                                    </span>
+                                    @if($survey->status === 'active')
+                                        <span class="text-[10px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1 mt-1">
+                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                            {{ number_format($survey->satisfaction_score ?? 0, 1) }} Score
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-2">
@@ -78,7 +104,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-20 text-center">
+                            <td colspan="6" class="px-6 py-20 text-center">
                                 <div class="max-w-xs mx-auto space-y-4">
                                     <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
                                         <img src="{{ asset('images/icons/stat-surveys.png') }}" class="w-8 h-8 opacity-40" alt="">

@@ -16,39 +16,23 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
+        @auth
+            @if(Auth::check() && Auth::user()->status === 'inactive')
+                <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 2rem; border-radius: 1rem; text-align: center;">
+                        <h1 style="color: red; font-size: 2rem; font-weight: bold;">ACCOUNT DEACTIVATED</h1>
+                        <p>Please contact the Super Admin.</p>
+                        <form method="POST" action="{{ route('logout') }}"> @csrf <button type="submit" style="text-decoration: underline; margin-top: 1rem;">Logout</button></form>
+                    </div>
+                </div>
+            @endif
+        @endauth
+        
         <div class="min-h-screen">
             <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>
         </div>
-
-        <!-- Lock Screen Overlay for Inactive Users -->
-        @if(isset($is_deactivated) && $is_deactivated)
-            <div class="fixed inset-0 z-[9999] bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-hidden pointer-events-auto" 
-                 x-data x-init="document.body.style.overflow = 'hidden'">
-                <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-10 text-center transform transition-all">
-                    <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
-                    
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2 font-inter">Account Inactive</h2>
-                    <p class="text-gray-500 mb-8 leading-relaxed font-inter">Your account has been deactivated. Please contact the Super Admin for assistance.</p>
-                    
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="w-full bg-[#1b8c00] text-white font-bold py-4 rounded-2xl hover:bg-[#167000] transition-all shadow-lg shadow-green-900/20">
-                            Logout and Exit
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <style>
-                body { pointer-events: none !important; }
-                .z-\[9999\] { pointer-events: auto !important; }
-            </style>
-        @endif
     </body>
 </html>

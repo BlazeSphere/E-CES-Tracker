@@ -61,6 +61,19 @@
                     </div>
 
                     <div class="md:col-span-12 space-y-2">
+                        <label for="project_id" class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Target Project</label>
+                        <select name="project_id" id="project_id" required class="w-full bg-gray-50 border-emerald-100 rounded-xl px-4 py-3 text-sm font-bold text-gray-700 border-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="">Select a Project...</option>
+                            @foreach($projects as $project)
+                                <option value="{{ $project->id }}" {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                                    CES-Project #{{ str_pad($project->id, 3, '0', STR_PAD_LEFT) }} - {{ $project->project_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('project_id') <p class="text-red-500 text-[10px] mt-1 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="md:col-span-12 space-y-2">
                         <label for="description" class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Description</label>
                         <textarea name="description" id="description" rows="2" 
                                   class="w-full bg-gray-50 border-emerald-100 rounded-xl px-4 py-3 text-sm focus:ring-emerald-500 focus:border-emerald-500 transition-all font-medium border-2"

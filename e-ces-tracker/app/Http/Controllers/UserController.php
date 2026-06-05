@@ -30,6 +30,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Ensure UI values like 'Deactivated' map correctly to the database 'inactive' state
+        if (strtolower($request->input('status')) === 'deactivated') {
+            $request->merge(['status' => 'inactive']);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email:rfc,dns|unique:users,email',
@@ -62,6 +67,12 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Ensure UI values like 'Deactivated' or 'Disabled' map correctly to the database 'inactive' state
+        $statusInput = strtolower($request->input('status'));
+        if (in_array($statusInput, ['deactivated', 'disabled'])) {
+            $request->merge(['status' => 'inactive']);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => "required|email:rfc,dns|unique:users,email,{$user->id}",

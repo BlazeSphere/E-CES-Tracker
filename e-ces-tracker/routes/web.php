@@ -10,12 +10,17 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\ProjectController;
 
 Route::get('/', [AuthenticatedSessionController::class, 'create']);
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+Route::get('/account-locked', function () { 
+    return view('errors.account-locked'); 
+})->name('account.locked');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -37,4 +42,7 @@ Route::middleware(['role:0'])->group(function () {
 
 Route::resource('surveys', SurveyController::class);
 
-
+Route::middleware(['auth'])->group(function () {
+    Route::post('projects/{id}/restore', [ProjectController::class, 'restore'])->name('projects.restore');
+    Route::resource('projects', ProjectController::class);
+});

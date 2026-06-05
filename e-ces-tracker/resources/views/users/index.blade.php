@@ -272,7 +272,7 @@
                                 <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Status</label>
                                 <select name="status" x-model="editUser.status" required class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
                                     <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="inactive">Deactivated</option>
                                 </select>
                                 <x-input-error :messages="$errors->get('status')" />
                             </div>
