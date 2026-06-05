@@ -7,7 +7,7 @@
                 <p class="text-emerald-900 font-semibold text-base font-inter">Manage and monitor community assessments for your department.</p>
             </div>
             <a href="{{ route('surveys.create') }}" class="bg-emerald-800 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg hover:bg-emerald-900 transition-all transform hover:-translate-y-0.5">
-                <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-5 h-5 brightness-0 invert" alt="">
+                <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-5 h-5 brightness-0 invert" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                 Create New Survey
             </a>
         </div>
@@ -85,10 +85,10 @@
                             <td class="px-6 py-5 text-right">
                                 <div class="flex justify-end items-center gap-3">
                                     <a href="{{ route('surveys.show', $survey) }}" class="p-2 hover:bg-white rounded-lg transition-colors group/btn shadow-sm border border-transparent hover:border-emerald-200" title="View Results">
-                                        <img src="{{ asset('images/icons/trend-up.png') }}" class="w-4 h-4 opacity-60 group-hover/btn:opacity-100" alt="">
+                                        <img src="{{ asset('images/icons/trend-up.png') }}" class="w-4 h-4 opacity-60 group-hover/btn:opacity-100" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                                     </a>
                                     <a href="{{ route('surveys.edit', $survey) }}" class="p-2 hover:bg-white rounded-lg transition-colors group/btn shadow-sm border border-transparent hover:border-emerald-200" title="Edit Survey">
-                                        <img src="{{ asset('images/icons/settings.png') }}" class="w-4 h-4 opacity-60 group-hover/btn:opacity-100" alt="">
+                                        <img src="{{ asset('images/icons/settings.png') }}" class="w-4 h-4 opacity-60 group-hover/btn:opacity-100" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                                     </a>
                                     <form action="{{ route('surveys.destroy', $survey) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this survey?')">
                                         @csrf
@@ -107,7 +107,7 @@
                             <td colspan="6" class="px-6 py-20 text-center">
                                 <div class="max-w-xs mx-auto space-y-4">
                                     <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
-                                        <img src="{{ asset('images/icons/stat-surveys.png') }}" class="w-8 h-8 opacity-40" alt="">
+                                        <img src="{{ asset('images/icons/stat-surveys.png') }}" class="w-8 h-8 opacity-40" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                                     </div>
                                     <div>
                                         <p class="text-sm font-bold text-gray-900">No surveys found</p>

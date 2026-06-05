@@ -39,8 +39,12 @@ class DashboardController extends Controller
         $activeProjects = (clone $projectQuery)->where('status', 'ongoing')->latest()->get();
         $latestProject = (clone $projectQuery)->where('status', 'ongoing')->with('user')->latest()->first();
         
-        // Mocking member list since no relationship exists yet
-        $projectMembers = $latestProject ? User::where('department', $department)->take(3)->get() : collect();
+        // If Super Admin, show members from any department; otherwise, restrict to user's department
+        $projectMembers = $latestProject 
+            ? User::when(!$isSuperAdmin, function($q) use ($department) {
+                return $q->where('department', $department);
+            })->take(3)->get() 
+            : collect();
 
         $recentSurveys = (clone $surveyQuery)->latest()->take(3)->get();
 

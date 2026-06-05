@@ -19,20 +19,30 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
+        $isSuperAdmin = $user->role === 0; // Using raw 0 per instruction, but User::ROLE_SUPER_ADMIN is also 0
+
         // 1. Capture filters
         $dateRange = $request->input('date_range');
         $category = $request->input('category');
         $department = $request->input('department');
 
+        // If not super admin, force their own department
+        if (!$isSuperAdmin) {
+            $department = $user->department;
+        }
+
         // Fetch all schools for the filter dropdown
         $schools = School::all();
 
         // Helper to apply filters to a query
-        $applyFilters = function ($query) use ($dateRange, $category, $department) {
+        $applyFilters = function ($query) use ($dateRange, $category, $department, $isSuperAdmin, $user) {
             $query->when($category && $category !== 'All Projects', function ($q) use ($category) {
                 return $q->where('category', $category);
             });
 
+            // If Super Admin, they can filter by any department or see all
+            // If not Super Admin, they are restricted to their own department (set above)
             $query->when($department && $department !== 'All Departments', function ($q) use ($department) {
                 return $q->where('department', $department);
             });
@@ -56,16 +66,32 @@ class ReportController extends Controller
 
         $stats = [
             'totalProjects' => $statsQuery->count(),
-            'completedSurveys' => Survey::count(), 
+            'completedSurveys' => Survey::when(!$isSuperAdmin, function($q) use ($user) {
+                return $q->whereHas('creator', function($sq) use ($user) {
+                    $sq->where('department', $user->department);
+                });
+            })->count(), 
             'totalVolunteers' => $statsQuery->sum('volunteers_count'),
-            'activeCommunities' => Community::count(),
+            'activeCommunities' => Community::when(!$isSuperAdmin, function($q) use ($user) {
+                return $q->whereHas('projects', function($pq) use ($user) {
+                    $pq->where('department', $user->department);
+                });
+            })->count(),
         ];
 
-        // 3. Pie Chart: Group by category
-        $distributionQuery = Project::select('category', DB::raw('count(*) as count'))
-            ->whereNotNull('category');
+        // 3. Pie Chart: Group by category (Admin) or department (Super Admin)
+        if ($isSuperAdmin) {
+            $distributionQuery = Project::select('department as label', DB::raw('count(*) as count'))
+                ->whereNotNull('department');
+            $chartTitle = 'Project Distribution by School';
+        } else {
+            $distributionQuery = Project::select('category as label', DB::raw('count(*) as count'))
+                ->whereNotNull('category');
+            $chartTitle = 'Project Distribution by Category';
+        }
+        
         $applyFilters($distributionQuery);
-        $distributionData = $distributionQuery->groupBy('category')->get();
+        $distributionData = $distributionQuery->groupBy('label')->get();
 
         // 4. Bar Chart: Monthly counts for current year
         $monthlyQuery = Project::select(
@@ -92,7 +118,9 @@ class ReportController extends Controller
             'dateRange', 
             'category', 
             'department',
-            'schools'
+            'schools',
+            'isSuperAdmin',
+            'chartTitle'
         ));
     }
 

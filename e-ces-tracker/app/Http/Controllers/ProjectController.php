@@ -50,11 +50,12 @@ class ProjectController extends Controller
             'pending' => (clone $query)->where('status', 'Planned')->count(),
         ];
 
-        $projects = $query->with('user')->latest()->paginate(9)->appends($request->all());
+        $projects = $query->with(['user', 'adoptedCommunity'])->latest()->paginate(9)->appends($request->all());
         $users = User::where('department', $user->department)->get();
         $schools = School::all();
+        $communities = \App\Models\AdoptedCommunity::all();
 
-        return view('projects.index', compact('projects', 'stats', 'users', 'schools', 'search', 'status', 'department'));
+        return view('projects.index', compact('projects', 'stats', 'users', 'schools', 'communities', 'search', 'status', 'department'));
     }
 
     /**
@@ -81,6 +82,7 @@ class ProjectController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'budget' => 'nullable|numeric|min:0',
             'user_id' => 'required|exists:users,id', // Person in Charge
+            'adopted_community_id' => 'nullable|exists:adopted_communities,id',
         ]);
 
         $validated['department'] = Auth::user()->department;
@@ -125,6 +127,7 @@ class ProjectController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'budget' => 'nullable|numeric|min:0',
             'user_id' => 'required|exists:users,id',
+            'adopted_community_id' => 'nullable|exists:adopted_communities,id',
         ]);
 
         $project->update($validated);

@@ -102,10 +102,17 @@
                                 <td class="px-6 py-4 text-gray-600">{{ $school->code }}</td>
                                 <td class="px-6 py-4 text-gray-500 max-w-xs truncate">{{ $school->description ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">
-                                    <button @click="openSchoolModal({ id: {{ $school->id }}, name: '{{ addslashes($school->name) }}', code: '{{ $school->code }}', description: '{{ addslashes($school->description ?? '') }}' })" 
-                                            class="text-[#1b8c00] font-bold hover:underline">
-                                        Modify
-                                    </button>
+                                    <div class="flex items-center gap-4">
+                                        <button @click="openSchoolModal({ id: {{ $school->id }}, name: '{{ addslashes($school->name) }}', code: '{{ $school->code }}', description: '{{ addslashes($school->description ?? '') }}' })" 
+                                                class="text-[#1b8c00] font-bold hover:underline">
+                                            Modify
+                                        </button>
+                                        <form action="{{ route('settings.school.destroy', $school->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this school?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 font-bold hover:underline">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             @empty
@@ -145,10 +152,17 @@
                                 <td class="px-6 py-4 text-gray-600">{{ $community->code }}</td>
                                 <td class="px-6 py-4 text-gray-500 max-w-xs truncate">{{ $community->address }}</td>
                                 <td class="px-6 py-4">
-                                    <button @click="openCommunityModal({ id: {{ $community->id }}, name: '{{ addslashes($community->name) }}', code: '{{ $community->code }}', address: '{{ addslashes($community->address) }}' })"
-                                            class="text-[#1b8c00] font-bold hover:underline">
-                                        Modify
-                                    </button>
+                                    <div class="flex items-center gap-4">
+                                        <button @click="openCommunityModal({ id: {{ $community->id }}, name: '{{ addslashes($community->name) }}', code: '{{ $community->code }}', address: '{{ addslashes($community->address) }}' })"
+                                                class="text-[#1b8c00] font-bold hover:underline">
+                                            Modify
+                                        </button>
+                                        <form action="{{ route('settings.community.destroy', $community->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this community?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 font-bold hover:underline">Delete</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                             @empty

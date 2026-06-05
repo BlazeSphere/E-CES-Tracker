@@ -27,7 +27,8 @@
                 department: project.department,
                 budget: project.budget,
                 start_date: project.start_date,
-                end_date: project.end_date
+                end_date: project.end_date,
+                adopted_community_id: project.adopted_community_id
             };
             this.isEditModalOpen = true;
         },
@@ -60,7 +61,7 @@
                 <p class="text-emerald-900 font-semibold text-base font-inter">Manage and monitor your department's community service initiatives.</p>
             </div>
             <button @click="isCreateModalOpen = true" class="bg-emerald-800 text-white px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 shadow-lg hover:bg-emerald-900 transition-all transform hover:-translate-y-0.5">
-                <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-5 h-5 brightness-0 invert" alt="">
+                <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-5 h-5 brightness-0 invert" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                 New Project
             </button>
         </div>
@@ -90,15 +91,17 @@
                     <option value="Completed" {{ $status == 'Completed' ? 'selected' : '' }}>Completed</option>
                 </select>
 
-                <select name="department" class="bg-gray-50 border-emerald-50 rounded-xl px-4 py-2.5 text-sm font-bold text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 border-2">
-                    <option value="">All Departments</option>
+                @if(auth()->user()->role === 0)
+                <select name="department" onchange="this.form.submit()" class="bg-gray-50 border-emerald-50 rounded-xl px-4 py-2.5 text-sm font-bold text-gray-700 focus:ring-emerald-500 focus:border-emerald-500 border-2">
+                    <option value="">All Schools</option>
                     @foreach($schools as $school)
                         <option value="{{ $school->code }}" {{ $department == $school->code ? 'selected' : '' }}>{{ $school->code }}</option>
                     @endforeach
                 </select>
+                @endif
 
                 <button type="submit" class="p-2.5 bg-emerald-800 text-white rounded-xl hover:bg-emerald-900 transition-all shadow-md group">
-                    <img src="{{ asset('images/icons/audit.png') }}" class="w-5 h-5 brightness-0 invert group-hover:scale-110 transition-transform" alt="Filter">
+                    <img src="{{ asset('images/icons/audit.png') }}" class="w-5 h-5 brightness-0 invert group-hover:scale-110 transition-transform" alt="Filter" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                 </button>
             </div>
         </form>
@@ -110,15 +113,29 @@
                 <!-- Card Header -->
                 <div class="p-6 pb-4">
                     <div class="flex justify-between items-start mb-4">
-                        <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest
-                            @switch($project->status)
-                                @case('Completed') bg-emerald-100 text-emerald-700 @break
-                                @case('In Progress') bg-green-100 text-green-700 @break
-                                @case('Planned') bg-yellow-100 text-yellow-700 @break
-                                @default bg-gray-200 text-gray-700
-                            @endswitch">
-                            {{ $project->status }}
-                        </span>
+                        <div class="flex gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest
+                                @switch($project->status)
+                                    @case('Completed') bg-emerald-100 text-emerald-700 @break
+                                    @case('In Progress') bg-green-100 text-green-700 @break
+                                    @case('Planned') bg-yellow-100 text-yellow-700 @break
+                                    @default bg-gray-200 text-gray-700
+                                @endswitch">
+                                <span class="w-1.5 h-1.5 rounded-full 
+                                    @switch($project->status)
+                                        @case('Completed') bg-emerald-500 @break
+                                        @case('In Progress') bg-green-500 @break
+                                        @case('Planned') bg-yellow-500 @break
+                                        @default bg-gray-500
+                                    @endswitch"></span>
+                                {{ $project->status }}
+                            </span>
+                            @if(auth()->user()->role === 0)
+                            <span class="inline-flex px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-200 text-gray-600 border border-gray-300">
+                                {{ $project->department }}
+                            </span>
+                            @endif
+                        </div>
                         <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">CES-Project #{{ str_pad($project->id, 3, '0', STR_PAD_LEFT) }}</p>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 group-hover:text-emerald-800 transition-colors tracking-tight line-clamp-2 h-14">{{ $project->project_name }}</h3>
@@ -127,8 +144,14 @@
                 <!-- Card Body -->
                 <div class="px-6 py-4 flex-grow space-y-6">
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center text-emerald-800 font-black text-sm">
-                            {{ strtoupper(substr($project->user->name ?? 'U', 0, 1)) }}
+                        <div class="relative">
+                            @if($project->user && $project->user->profile_photo_path)
+                                <img src="{{ asset($project->user->profile_photo_path) }}" class="w-12 h-12 rounded-full border-2 border-white shadow-sm object-cover" alt="" onerror="this.onerror=null; this.src='/images/user-profile.png';">
+                            @else
+                                <div class="w-12 h-12 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center text-emerald-800 font-black text-sm">
+                                    {{ strtoupper(substr($project->user->name ?? 'U', 0, 1)) }}
+                                </div>
+                            @endif
                         </div>
                         <div>
                             <p class="text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-0.5">Person in Charge</p>
@@ -160,7 +183,7 @@
             @empty
             <div class="col-span-full py-24 text-center">
                 <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <img src="{{ asset('images/icons/stat-projects.png') }}" class="w-10 h-10 opacity-30" alt="">
+                    <img src="{{ asset('images/icons/stat-projects.png') }}" class="w-10 h-10 opacity-30" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                 </div>
                 <h3 class="text-lg font-bold text-gray-900">No projects discovered</h3>
                 <p class="text-sm text-gray-500 mt-1 max-w-xs mx-auto">It looks like your department hasn't registered any community service projects yet.</p>
@@ -225,6 +248,15 @@
                                     <option value="Environmental">Environmental</option>
                                     <option value="Educational">Educational</option>
                                     <option value="Health">Health</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Partner Community</label>
+                                <select name="adopted_community_id" class="w-full bg-gray-50 border-2 border-emerald-50 rounded-xl px-4 py-3 text-sm font-bold focus:ring-emerald-500 focus:border-emerald-500">
+                                    <option value="">Select a community...</option>
+                                    @foreach($communities as $community)
+                                        <option value="{{ $community->id }}">{{ $community->name }} ({{ $community->code }})</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="grid grid-cols-3 gap-6">
@@ -306,6 +338,15 @@
                                     <option value="Health">Health</option>
                                 </select>
                             </div>
+                            <div class="space-y-2">
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Partner Community</label>
+                                <select name="adopted_community_id" x-model="editingProject.adopted_community_id" class="w-full bg-gray-50 border-2 border-emerald-50 rounded-xl px-4 py-3 text-sm font-bold focus:ring-emerald-500 focus:border-emerald-500">
+                                    <option value="">Select a community...</option>
+                                    @foreach($communities as $community)
+                                        <option value="{{ $community->id }}">{{ $community->name }} ({{ $community->code }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="grid grid-cols-3 gap-6">
                                 <div class="space-y-2">
                                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</label>
@@ -367,6 +408,10 @@
                                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Department</p>
                                     <p class="font-bold text-gray-900" x-text="viewingProject.department"></p>
                                 </div>
+                            </div>
+                            <div x-show="viewingProject.adopted_community">
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Partner Community</p>
+                                <p class="font-bold text-[#1b8c00]" x-text="viewingProject.adopted_community ? viewingProject.adopted_community.name + ' (' + viewingProject.adopted_community.code + ')' : 'None'"></p>
                             </div>
                         </div>
                         

@@ -97,11 +97,11 @@
                     <h3 class="font-crimson font-bold text-2xl mb-6">Contact Us</h3>
                     <div class="space-y-4">
                         <a href="#" class="flex items-center justify-center lg:justify-start gap-3 hover:text-gray-200">
-                            <img src="{{ asset('images/icons/facebook.png') }}" class="w-6 h-6" alt="Facebook">
+                            <img src="{{ asset('images/icons/facebook.png') }}" onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" class="w-6 h-6" alt="Facebook">
                             <span class="font-crimson font-semibold text-lg">Facebook</span>
                         </a>
                         <a href="#" class="flex items-center justify-center lg:justify-start gap-3 hover:text-gray-200">
-                            <img src="{{ asset('images/icons/instagram.png') }}" class="w-6 h-6" alt="Instagram">
+                            <img src="{{ asset('images/icons/instagram.png') }}" onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" class="w-6 h-6" alt="Instagram">
                             <span class="font-crimson font-semibold text-lg">Instagram</span>
                         </a>
                     </div>
@@ -113,11 +113,11 @@
                     <div class="space-y-4 font-crimson font-semibold">
                         <p class="text-sm">Gov. Infantado St., Calapan City, Oriental Mindoro</p>
                         <div class="flex items-center justify-center lg:justify-start gap-3 text-sm">
-                            <img src="{{ asset('images/icons/phone.png') }}" class="w-6 h-6" alt="Phone">
+                            <img src="{{ asset('images/icons/phone.png') }}" onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" class="w-6 h-6" alt="Phone">
                             <span>288-9311 - 288-9316</span>
                         </div>
                         <div class="flex items-center justify-center lg:justify-start gap-3 text-sm">
-                            <img src="{{ asset('images/icons/email.png') }}" class="w-6 h-6" alt="Email">
+                            <img src="{{ asset('images/icons/email.png') }}" onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" class="w-6 h-6" alt="Email">
                             <span class="break-all">communityextensionservicesoffice@gmail.com</span>
                         </div>
                     </div>

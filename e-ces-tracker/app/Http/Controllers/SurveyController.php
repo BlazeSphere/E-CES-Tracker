@@ -57,47 +57,47 @@ class SurveyController extends Controller
         return view('surveys.create', compact('projects'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // Debugging: Temporarily stop and show form data
-        dd($request->all());
+        $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|in:draft,active,closed',
+            'questions' => 'required|array|min:1',
+            'questions.*.question_text' => 'required|string|max:255',
+            'questions.*.type' => 'required|in:text,scale,multiple_choice',
+            'questions.*.is_required' => 'nullable',
+            'questions.*.choices' => 'nullable|array',
+            'questions.*.choices.*' => 'nullable|string|max:255',
+        ]);
 
         try {
-            DB::beginTransaction();
+            DB::transaction(function () use ($validated) {
+                $survey = Survey::create([
+                    'project_id' => $validated['project_id'],
+                    'title' => $validated['title'],
+                    'description' => $validated['description'],
+                    'status' => $validated['status'],
+                    'department' => auth()->user()->department,
+                    'created_by' => auth()->id(),
+                    'form_data' => json_encode([]),
+                ]);
 
-            // 1. Save the Survey
-            $survey = Survey::create([
-                'project_id' => $request->project_id,
-                'title' => $request->title,
-                'description' => $request->description,
-                'status' => $request->status,
-                'department' => auth()->user()->department,
-                'created_by' => auth()->id(),
-            ]);
-
-            // 2. Save Questions only AFTER survey is saved
-            if ($request->has('questions')) {
-                foreach ($request->questions as $questionData) {
+                foreach ($validated['questions'] as $questionData) {
                     $survey->questions()->create([
-                        'question_text' => $questionData['text'],
+                        'question_text' => $questionData['question_text'],
                         'type' => $questionData['type'],
-                        'is_required' => isset($questionData['required']),
+                        'is_required' => isset($questionData['is_required']) ? filter_var($questionData['is_required'], FILTER_VALIDATE_BOOLEAN) : false,
                         'choices' => $questionData['type'] === 'multiple_choice' ? ($questionData['choices'] ?? []) : null,
                     ]);
                 }
-            }
+            });
 
-            DB::commit();
-
-            return redirect()->route('surveys.index')->with('success', 'Survey created successfully.');
+            return redirect()->route('surveys.index')->with('success', 'Survey built and saved successfully!');
 
         } catch (\Exception $e) {
-            DB::rollBack();
-            // Show the specific database error message
-            return back()->withInput()->with('error', 'Database Error: ' . $e->getMessage());
+            return back()->withErrors(['error' => $e->getMessage()])->withInput();
         }
     }
 

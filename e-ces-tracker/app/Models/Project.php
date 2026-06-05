@@ -23,8 +23,14 @@ class Project extends Model
         'beneficiaries_count',
         'completion_percentage',
         'impact_score',
-        'user_id'
+        'user_id',
+        'adopted_community_id'
     ];
+
+    public function adoptedCommunity(): BelongsTo
+    {
+        return $this->belongsTo(AdoptedCommunity::class);
+    }
 
     public function events() {
         return $this->hasMany(Event::class);

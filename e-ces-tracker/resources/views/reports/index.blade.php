@@ -83,7 +83,7 @@
             <!-- Project Distribution -->
             <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden flex flex-col h-[450px]">
                 <div class="bg-[#1b8c00] p-4 text-white">
-                    <h3 class="font-bold text-sm font-inter">Project Distribution by Category</h3>
+                    <h3 class="font-bold text-sm font-inter">{{ $chartTitle }}</h3>
                 </div>
                 <div class="flex-grow p-8 flex items-center justify-center">
                     <canvas id="projectDistributionChart"></canvas>
@@ -110,7 +110,7 @@
                 new Chart(pieCtx, {
                     type: 'pie',
                     data: {
-                        labels: distData.map(item => item.category),
+                        labels: distData.map(item => item.label),
                         datasets: [{
                             data: distData.map(item => item.count),
                             backgroundColor: [
@@ -187,7 +187,7 @@
                     <thead class="bg-gray-50 text-gray-500">
                         <tr>
                             <th class="px-6 py-4 font-bold text-[10px] uppercase tracking-wider">Project Name</th>
-                            <th class="px-6 py-4 font-bold text-[10px] uppercase tracking-wider">Department</th>
+                            <th class="px-6 py-4 font-bold text-[10px] uppercase tracking-wider">School</th>
                             <th class="px-6 py-4 font-bold text-[10px] uppercase tracking-wider">Beneficiaries</th>
                             <th class="px-6 py-4 font-bold text-[10px] uppercase tracking-wider">Completion</th>
                             <th class="px-6 py-4 font-bold text-[10px] uppercase tracking-wider">Impact Score</th>

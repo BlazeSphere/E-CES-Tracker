@@ -8,11 +8,11 @@
             </div>
             <div class="flex gap-4 mb-2">
                 <button class="bg-white border border-gray-200 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 shadow-sm hover:bg-gray-50 transition-colors">
-                    <img src="{{ asset('images/icons/audit.png') }}" class="w-4 h-4 opacity-70" alt="">
+                    <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/audit.png') }}" class="w-4 h-4 opacity-70" alt="">
                     Filter View
                 </button>
                 <button class="bg-emerald-800 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 shadow-sm hover:bg-emerald-900 transition-colors">
-                    <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-4 h-4 brightness-0 invert" alt="">
+                    <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/plus-circle.png') }}" class="w-4 h-4 brightness-0 invert" alt="">
                     New Project
                 </button>
             </div>
@@ -34,7 +34,7 @@
                         <h3 class="font-bold text-sm">Active Projects</h3>
                         <p class="text-[9px] opacity-70">Consolidated survey and project metrics</p>
                     </div>
-                    <img src="{{ asset('images/icons/notifications.png') }}" class="w-5 h-5 opacity-70" alt="">
+                    <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/notifications.png') }}" class="w-5 h-5 opacity-70" alt="">
                 </div>
                 <div class="flex-grow overflow-y-auto divide-y divide-gray-100">
                     @forelse($activeProjectsList as $project)
@@ -55,7 +55,7 @@
                 <div class="p-4 bg-gray-50 border-t border-gray-100">
                     <button class="w-full bg-emerald-900 text-white py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-black transition-colors">
                         View All Projects
-                        <img src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4 brightness-0 invert opacity-70" alt="">
+                        <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4 brightness-0 invert opacity-70" alt="">
                     </button>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                             <div class="flex gap-2">
                                 <button class="bg-white border border-gray-200 px-4 py-2 rounded text-[10px] font-bold shadow-sm hover:bg-gray-50 transition-colors uppercase">Details</button>
                                 <button class="bg-emerald-900 text-white px-4 py-2 rounded text-[10px] font-bold shadow-sm flex items-center gap-2 hover:bg-emerald-950 transition-colors uppercase">
-                                    <img src="{{ asset('images/icons/audit.png') }}" class="w-3 h-3 brightness-0 invert opacity-70" alt="">
+                                    <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/audit.png') }}" class="w-3 h-3 brightness-0 invert opacity-70" alt="">
                                     Update Status
                                 </button>
                             </div>
@@ -131,7 +131,7 @@
         <!-- Bottom Row: 3 'Recent Survey Insights' cards -->
         <div class="space-y-8">
             <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
-                <img src="{{ asset('images/icons/stat-surveys.png') }}" class="w-8 h-8" alt="">
+                <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/stat-surveys.png') }}" class="w-8 h-8" alt="">
                 <h3 class="text-2xl font-bold text-gray-900 tracking-tight">Recent Survey Insights</h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -141,7 +141,7 @@
                         <h5 class="text-sm font-bold text-gray-900 w-2/3 leading-snug">{{ $survey->title }}</h5>
                         <div class="bg-white rounded-lg px-3 py-1.5 flex items-center gap-2 shadow-sm border border-emerald-100">
                             <span class="text-xs font-bold text-emerald-900">{{ number_format($survey->satisfaction_score, 1) }}/5.0</span>
-                            <img src="{{ asset('images/icons/notifications.png') }}" class="w-3 h-3 opacity-50" alt="">
+                            <img onerror="this.onerror=null; this.src='{{ asset('images/icons/plus-circle.png') }}';" src="{{ asset('images/icons/notifications.png') }}" class="w-3 h-3 opacity-50" alt="">
                         </div>
                     </div>
                     <div class="mt-auto">

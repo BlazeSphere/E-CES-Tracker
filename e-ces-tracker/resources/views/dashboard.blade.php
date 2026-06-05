@@ -38,19 +38,19 @@
                     </div>
                     <div class="p-6 space-y-4">
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-6 h-6" alt="">
+                            <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-6 h-6" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                             <span class="font-semibold text-sm">Add System User</span>
                         </button>
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-6 h-6" alt="">
+                            <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-6 h-6" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                             <span class="font-semibold text-sm">Create New Survey</span>
                         </button>
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="{{ asset('images/icons/audit.png') }}" class="w-5 h-5 ml-0.5" alt="">
+                            <img src="{{ asset('images/icons/audit.png') }}" class="w-5 h-5 ml-0.5" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                             <span class="font-semibold text-sm">Audit Logs</span>
                         </button>
                         <button class="w-full bg-[#f7f9ec] p-3 rounded-lg shadow-sm flex items-center gap-3 hover:bg-[#eef2d8] transition-colors border border-transparent hover:border-[#15803d]">
-                            <img src="{{ asset('images/icons/reports.png') }}" class="w-6 h-6" alt="">
+                            <img src="{{ asset('images/icons/reports.png') }}" class="w-6 h-6" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                             <span class="font-semibold text-sm">Generate Summary Report</span>
                         </button>
                     </div>
@@ -60,7 +60,7 @@
                 <div class="bg-white border border-[#15803d] rounded-lg shadow-sm overflow-hidden">
                     <div class="bg-[#15803d] p-4 text-white shadow-md flex justify-between items-center">
                         <h3 class="font-bold text-sm">Audit Log</h3>
-                        <a href="{{ route('audit.index') }}" class="text-[10px] font-medium hover:underline">View All</a>
+                        <a href="{{ route('audit-logs.index') }}" class="text-[10px] font-medium hover:underline">View All</a>
                     </div>
                     <div class="p-4 space-y-6">
                         @forelse($auditLogs ?? [] as $log)
@@ -140,7 +140,7 @@
                                 <td class="px-6 py-4">
                                     <a href="#" class="text-emerald-900 font-bold text-xs flex items-center gap-2 hover:underline group">
                                         See Details
-                                        <img src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" alt="">
+                                        <img src="{{ asset('images/icons/chevron-right.png') }}" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                                     </a>
                                 </td>
                             </tr>

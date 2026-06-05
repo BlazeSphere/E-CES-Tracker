@@ -37,7 +37,7 @@
             <div class="bg-white border-2 border-emerald-100 rounded-2xl p-8 shadow-sm space-y-6">
                 <div class="flex items-center gap-3 border-b border-emerald-50 pb-4">
                     <div class="p-2 bg-emerald-50 rounded-lg">
-                        <img src="{{ asset('images/icons/settings.png') }}" class="w-5 h-5 opacity-70" alt="">
+                        <img src="{{ asset('images/icons/settings.png') }}" class="w-5 h-5 opacity-70" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                     </div>
                     <h3 class="text-lg font-bold text-gray-900">General Settings</h3>
                 </div>
@@ -89,7 +89,7 @@
                     <h3 class="text-xl font-bold text-gray-900">Questions</h3>
                     <button type="button" @click="addQuestion()" 
                             class="bg-emerald-800 text-white px-6 py-2 rounded-xl text-xs font-bold hover:bg-emerald-900 transition-all flex items-center gap-2 shadow-md transform hover:scale-105 active:scale-95">
-                        <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-4 h-4 brightness-0 invert" alt="">
+                        <img src="{{ asset('images/icons/plus-circle.png') }}" class="w-4 h-4 brightness-0 invert" alt="" onerror="this.onerror=null; this.src='/images/icons/plus-circle.png';">
                         Add New Question
                     </button>
                 </div>
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="flex items-center gap-6">
                                     <label class="flex items-center gap-2 cursor-pointer group/toggle">
-                                        <input type="checkbox" :name="'questions['+index+'][required]'" x-model="question.required" 
+                                        <input type="checkbox" :name="'questions['+index+'][is_required]'" x-model="question.required" 
                                                class="w-4 h-4 text-emerald-600 border-emerald-200 rounded focus:ring-emerald-500">
                                         <span class="text-[10px] font-black text-gray-400 group-hover/toggle:text-emerald-700 transition-colors uppercase tracking-widest">Required</span>
                                     </label>
@@ -122,7 +122,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                                 <div class="md:col-span-8 space-y-2">
                                     <label class="block text-[9px] font-black text-gray-400 uppercase tracking-widest">Prompt / Question Text</label>
-                                    <input type="text" :name="'questions['+index+'][text]'" required x-model="question.text"
+                                    <input type="text" :name="'questions['+index+'][question_text]'" required x-model="question.text"
                                            class="w-full bg-gray-50 border-emerald-50 rounded-xl px-4 py-3 text-sm focus:ring-emerald-500 focus:border-emerald-500 transition-all font-bold border-2"
                                            placeholder="e.g. How satisfied were you with the workshop?">
                                 </div>

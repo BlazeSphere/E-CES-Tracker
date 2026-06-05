@@ -58,4 +58,22 @@ class SettingsController extends Controller
 
         return redirect()->route('settings.index')->with('success', 'Community saved successfully!');
     }
+
+    /**
+     * Delete a school.
+     */
+    public function destroySchool(School $school)
+    {
+        $school->delete();
+        return redirect()->route('settings.index')->with('success', 'School deleted successfully!');
+    }
+
+    /**
+     * Delete a community.
+     */
+    public function destroyCommunity(AdoptedCommunity $community)
+    {
+        $community->delete();
+        return redirect()->route('settings.index')->with('success', 'Community deleted successfully!');
+    }
 }

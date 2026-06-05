@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\AuditLog;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->paginate(10);
+        $schools = School::all();
 
         return view('users.index', [
             'users' => $users,
+            'schools' => $schools,
             'totalUsers' => User::count(),
             'systemAdminsCount' => User::where('role', User::ROLE_SUPER_ADMIN)->count(),
             'adminsCount' => User::where('role', User::ROLE_ADMIN)->count(),
@@ -40,6 +43,7 @@ class UserController extends Controller
             'email' => 'required|email:rfc,dns|unique:users,email',
             'role' => 'required|integer|in:0,1',
             'status' => 'required|string|in:active,inactive',
+            'department' => 'nullable|string|exists:schools,code',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -48,6 +52,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'role' => $validated['role'],
             'status' => $validated['status'],
+            'department' => $validated['department'],
             'password' => Hash::make($validated['password']),
         ]);
 
@@ -78,6 +83,7 @@ class UserController extends Controller
             'email' => "required|email:rfc,dns|unique:users,email,{$user->id}",
             'role' => 'required|integer|in:0,1',
             'status' => 'required|string|in:active,inactive',
+            'department' => 'nullable|string|exists:schools,code',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -86,6 +92,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'role' => $validated['role'],
             'status' => $validated['status'],
+            'department' => $validated['department'],
         ];
 
         if (!empty($validated['password'])) {

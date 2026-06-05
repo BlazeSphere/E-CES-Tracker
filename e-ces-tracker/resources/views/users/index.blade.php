@@ -8,7 +8,8 @@
             name: '{{ old('name', '') }}',
             email: '{{ old('email', '') }}',
             role: '{{ old('role', '') }}',
-            status: '{{ old('status', 'active') }}'
+            status: '{{ old('status', 'active') }}',
+            department: '{{ old('department', '') }}'
         },
         openEditModal(user) {
             this.editUser = { ...user };
@@ -131,13 +132,26 @@
                                 <x-input-error :messages="$errors->get('role')" />
                             </div>
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Status</label>
-                                <select name="status" required class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
-                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Department</label>
+                                <select name="department" class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
+                                    <option value="">No Department</option>
+                                    @foreach($schools as $school)
+                                        <option value="{{ $school->code }}" {{ old('department') == $school->code ? 'selected' : '' }}>
+                                            {{ $school->code }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                <x-input-error :messages="$errors->get('status')" />
+                                <x-input-error :messages="$errors->get('department')" />
                             </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Status</label>
+                            <select name="status" required class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
+                                <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('status')" />
                         </div>
 
                         <div x-data="{ showPassword: false }" class="space-y-6">
@@ -269,13 +283,26 @@
                                 <x-input-error :messages="$errors->get('role')" />
                             </div>
                             <div class="space-y-2">
-                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Status</label>
-                                <select name="status" x-model="editUser.status" required class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Deactivated</option>
+                                <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Department</label>
+                                <select name="department" x-model="editUser.department" class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
+                                    <option value="">No Department</option>
+                                    @foreach($schools as $school)
+                                        <option value="{{ $school->code }}">
+                                            {{ $school->code }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                <x-input-error :messages="$errors->get('status')" />
+                                <x-input-error :messages="$errors->get('department')" />
                             </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold text-gray-400 uppercase tracking-widest font-inter">Status</label>
+                            <select name="status" x-model="editUser.status" required class="block w-full bg-gray-50 border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3 focus:ring-[#1b8c00] focus:border-[#1b8c00] transition-all">
+                                <option value="active">Active</option>
+                                <option value="inactive">Deactivated</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('status')" />
                         </div>
 
                         <div x-data="{ showPassword: false }" class="space-y-6">
@@ -361,6 +388,7 @@
                             <th class="px-6 py-4 font-semibold text-sm">Name</th>
                             <th class="px-6 py-4 font-semibold text-sm">Email</th>
                             <th class="px-6 py-4 font-semibold text-sm">Role</th>
+                            <th class="px-6 py-4 font-semibold text-sm">School</th>
                             <th class="px-6 py-4 font-semibold text-sm">Status</th>
                             <th class="px-6 py-4 font-semibold text-sm">Actions</th>
                         </tr>
@@ -384,8 +412,12 @@
                                     {{ $user->role_name }}
                                 </span>
                             </td>
+                            <td class="px-6 py-4 text-xs font-bold text-gray-500">
+                                {{ $user->department ?? 'N/A' }}
+                            </td>
                             <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold {{ $user->status === 'active' ? 'bg-[#d9f99d] text-[#1b8c00]' : 'bg-red-100 text-red-700' }}">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold {{ $user->status === 'active' ? 'bg-[#d9f99d] text-[#1b8c00]' : 'bg-red-100 text-red-700' }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $user->status === 'active' ? 'bg-[#1b8c00]' : 'bg-red-500' }}"></span>
                                     {{ ucfirst($user->status) }}
                                 </span>
                             </td>
@@ -395,7 +427,8 @@
                                             name: '{{ addslashes($user->name) }}', 
                                             email: '{{ $user->email }}', 
                                             role: {{ $user->role }}, 
-                                            status: '{{ $user->status }}' 
+                                            status: '{{ $user->status }}',
+                                            department: '{{ $user->department ?? '' }}'
                                         })" 
                                         class="text-[#1b8c00] font-bold text-sm hover:underline">
                                     Edit

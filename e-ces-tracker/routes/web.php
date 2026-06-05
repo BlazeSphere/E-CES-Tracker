@@ -24,16 +24,18 @@ Route::get('/account-locked', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::middleware(['role:0'])->group(function () {
+Route::middleware(['auth', 'role:0'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/school', [SettingsController::class, 'storeSchool'])->name('settings.school.store');
+    Route::delete('/settings/school/{school}', [SettingsController::class, 'destroySchool'])->name('settings.school.destroy');
     Route::post('/settings/community', [SettingsController::class, 'storeCommunity'])->name('settings.community.store');
+    Route::delete('/settings/community/{community}', [SettingsController::class, 'destroyCommunity'])->name('settings.community.destroy');
 
-    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit.index');
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export/excel', [ReportController::class, 'downloadExcel'])->name('reports.excel');
