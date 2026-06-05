@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Survey;
 use App\Models\Community;
+use App\Models\School;
 use App\Exports\ProjectReportExport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,15 +24,18 @@ class ReportController extends Controller
         $category = $request->input('category');
         $department = $request->input('department');
 
+        // Fetch all schools for the filter dropdown
+        $schools = School::all();
+
         // Helper to apply filters to a query
         $applyFilters = function ($query) use ($dateRange, $category, $department) {
-            if ($category && $category !== 'All Projects') {
-                $query->where('category', $category);
-            }
+            $query->when($category && $category !== 'All Projects', function ($q) use ($category) {
+                return $q->where('category', $category);
+            });
 
-            if ($department && $department !== 'All Departments') {
-                $query->where('department', $department);
-            }
+            $query->when($department && $department !== 'All Departments', function ($q) use ($department) {
+                return $q->where('department', $department);
+            });
 
             if ($dateRange) {
                 if ($dateRange === 'Last 30 Days') {
@@ -52,9 +56,9 @@ class ReportController extends Controller
 
         $stats = [
             'totalProjects' => $statsQuery->count(),
-            'completedSurveys' => Survey::count(), // Note: Survey count is global or needs custom logic if linked to projects
+            'completedSurveys' => Survey::count(), 
             'totalVolunteers' => $statsQuery->sum('volunteers_count'),
-            'activeCommunities' => Community::count(), // Note: Communities are global in current schema
+            'activeCommunities' => Community::count(),
         ];
 
         // 3. Pie Chart: Group by category
@@ -75,12 +79,21 @@ class ReportController extends Controller
             ->orderBy('month_num')
             ->get();
 
-        // 5. Table: Latest projects (respecting filters)
+        // 5. Table: Projects ordered by impact score (respecting filters)
         $projectsQuery = Project::query();
         $applyFilters($projectsQuery);
         $projects = $projectsQuery->orderBy('impact_score', 'desc')->take(5)->get();
 
-        return view('reports.index', compact('stats', 'distributionData', 'monthlyData', 'projects', 'dateRange', 'category', 'department'));
+        return view('reports.index', compact(
+            'stats', 
+            'distributionData', 
+            'monthlyData', 
+            'projects', 
+            'dateRange', 
+            'category', 
+            'department',
+            'schools'
+        ));
     }
 
     /**

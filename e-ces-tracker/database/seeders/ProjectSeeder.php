@@ -14,13 +14,13 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         $adminId = \App\Models\User::first()?->id;
+        $schoolCodes = \App\Models\School::pluck('code')->toArray();
         
-        if (!$adminId) {
+        if (!$adminId || empty($schoolCodes)) {
             return;
         }
 
         $categories = ['Outreach', 'Environmental', 'Educational', 'Health'];
-        $departments = ['CS Department', 'Education Department', 'Nursing Department', 'Business Department', 'Engineering Department'];
         $statuses = ['planned', 'ongoing', 'completed'];
 
         for ($i = 1; $i <= 10; $i++) {
@@ -31,7 +31,7 @@ class ProjectSeeder extends Seeder
                 'project_name' => "Sample Project $i: " . ['Tree Planting', 'Literacy Drive', 'Medical Mission', 'Coastal Cleanup', 'Coding Workshop'][array_rand(['Tree Planting', 'Literacy Drive', 'Medical Mission', 'Coastal Cleanup', 'Coding Workshop'])],
                 'description' => 'A sample project generated for testing reports and analytics dashboards.',
                 'category' => $categories[array_rand($categories)],
-                'department' => $departments[array_rand($departments)],
+                'department' => $schoolCodes[array_rand($schoolCodes)],
                 'status' => $status,
                 'budget' => rand(5000, 50000),
                 'volunteers_count' => rand(5, 50),

@@ -57,11 +57,11 @@
                     <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-inter">Department</label>
                     <select name="department" class="block w-48 bg-gray-50 border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#1b8c00] focus:border-[#1b8c00]">
                         <option value="All Departments">All Departments</option>
-                        <option value="CS Department" {{ $department == 'CS Department' ? 'selected' : '' }}>CS Department</option>
-                        <option value="Education Department" {{ $department == 'Education Department' ? 'selected' : '' }}>Education Department</option>
-                        <option value="Nursing Department" {{ $department == 'Nursing Department' ? 'selected' : '' }}>Nursing Department</option>
-                        <option value="Business Department" {{ $department == 'Business Department' ? 'selected' : '' }}>Business Department</option>
-                        <option value="Engineering Department" {{ $department == 'Engineering Department' ? 'selected' : '' }}>Engineering Department</option>
+                        @foreach($schools as $school)
+                            <option value="{{ $school->code }}" {{ $department == $school->code ? 'selected' : '' }}>
+                                {{ $school->name }} ({{ $school->code }})
+                            </option>
+                        @endforeach
                     </select>
                 </div>
                 <button type="submit" class="bg-gray-100 hover:bg-gray-200 text-gray-600 px-6 py-2 rounded-lg text-sm font-bold transition-colors">
@@ -197,7 +197,11 @@
                         @forelse($projects as $project)
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 font-bold text-gray-900 text-sm">{{ $project->project_name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $project->department ?? 'N/A' }}</td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                                    {{ $project->department ?? 'N/A' }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ number_format($project->beneficiaries_count) }} People</td>
                             <td class="px-6 py-4">
                                 <div class="w-full bg-gray-100 rounded-full h-1.5 max-w-[100px]">
